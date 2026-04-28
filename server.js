@@ -45,6 +45,22 @@ const PORT   = process.env.PORT || 3000;
 
 const CLIENTS_FILE = path.join(__dirname, 'clients.json');
 
+// ─── Utilitaires sécurité ──────────────────────────────────────────────────
+function escapeHtml(str) {
+  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;');
+}
+
+const ALLOWED_ORIGINS = [
+  `http://localhost:${PORT}`,
+  'https://receptia.onrender.com',
+];
+
+function getSafeOrigin(req) {
+  const origin = req.headers.origin;
+  if (origin && ALLOWED_ORIGINS.includes(origin)) return origin;
+  return 'https://receptia.onrender.com';
+}
+
 // ─── Mapping plan → price ID Stripe ───────────────────────────────────────
 const PRICE_IDS = {
   starter: process.env.STRIPE_PRICE_STARTER,
@@ -68,18 +84,45 @@ const PLAN_AMOUNTS = {
 // Le webhook Stripe doit recevoir le raw body AVANT express.json()
 app.use('/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json());
+
+// Bloquer l'accès aux fichiers sensibles avant le middleware statique
+const BLOCKED_FILES = ['/clients.json', '/server.js', '/setup-stripe.js', '/package.json', '/package-lock.json'];
+app.use((req, res, next) => {
+  const p = req.path.toLowerCase();
+  if (BLOCKED_FILES.includes(p) || p.startsWith('/.') || p.endsWith('.json') && p !== '/') {
+    return res.status(404).end();
+  }
+  next();
+});
+
+// Rate limiting basique en mémoire
+const rateLimitMap = new Map();
+function rateLimit(windowMs, max) {
+  return (req, res, next) => {
+    const key = req.ip;
+    const now = Date.now();
+    const entry = rateLimitMap.get(key) || { count: 0, start: now };
+    if (now - entry.start > windowMs) { entry.count = 0; entry.start = now; }
+    entry.count++;
+    rateLimitMap.set(key, entry);
+    if (entry.count > max) return res.status(429).json({ error: 'Trop de requêtes. Réessayez dans quelques minutes.' });
+    next();
+  };
+}
+
 app.use(express.static(path.join(__dirname)));
 
 // ═══════════════════════════════════════════════════════════════════════════
 // POST /create-checkout-session
 // ═══════════════════════════════════════════════════════════════════════════
-app.post('/create-checkout-session', async (req, res) => {
+app.post('/create-checkout-session', rateLimit(60_000, 10), async (req, res) => {
   const { plan, email } = req.body;
 
   if (!plan || !PRICE_IDS[plan]) {
     return res.status(400).json({ error: 'Plan invalide. Valeurs acceptées : starter, pro, agency.' });
   }
-  if (!email || !email.includes('@')) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!email || !emailRegex.test(email)) {
     return res.status(400).json({ error: 'Email invalide.' });
   }
   if (!PRICE_IDS[plan]) {
@@ -101,8 +144,8 @@ app.post('/create-checkout-session', async (req, res) => {
         plan,
         email,
       },
-      success_url: `${req.headers.origin || `http://localhost:${PORT}`}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.origin || `http://localhost:${PORT}`}/#pricing`,
+      success_url: `${getSafeOrigin(req)}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${getSafeOrigin(req)}/#pricing`,
       locale: 'fr',
       billing_address_collection: 'auto',
       allow_promotion_codes: true,
@@ -176,7 +219,9 @@ app.get('/success', async (req, res) => {
     }
   }
 
-  const calendlyUrl = process.env.CALENDLY_URL || 'https://calendly.com/prospexxagency/appel-decouverte-receptia-20-min';
+  const safeEmail     = escapeHtml(email);
+  const safePlanLabel = escapeHtml(planLabel);
+  const calendlyUrl   = escapeHtml(process.env.CALENDLY_URL || 'https://calendly.com/prospexxagency/appel-decouverte-receptia-20-min');
 
   res.send(`<!DOCTYPE html>
 <html lang="fr">
@@ -192,8 +237,8 @@ app.get('/success', async (req, res) => {
   <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-lg w-full text-center">
     <div class="text-7xl mb-6">🎉</div>
     <h1 class="text-3xl font-extrabold text-gray-900 mb-3">Bienvenue chez ReceptIA !</h1>
-    <p class="text-gray-500 mb-2">Votre abonnement <strong class="text-blue-600">${planLabel}</strong> est actif.</p>
-    ${email ? `<p class="text-gray-400 text-sm mb-8">Un email de confirmation a été envoyé à <strong>${email}</strong></p>` : '<div class="mb-8"></div>'}
+    <p class="text-gray-500 mb-2">Votre abonnement <strong class="text-blue-600">${safePlanLabel}</strong> est actif.</p>
+    ${safeEmail ? `<p class="text-gray-400 text-sm mb-8">Un email de confirmation a été envoyé à <strong>${safeEmail}</strong></p>` : '<div class="mb-8"></div>'}
 
     <div class="bg-blue-50 rounded-2xl p-6 mb-8 text-left">
       <h2 class="font-bold text-gray-900 mb-3">📋 Prochaines étapes</h2>
@@ -204,7 +249,7 @@ app.get('/success', async (req, res) => {
       </ol>
     </div>
 
-    <button onclick="Calendly.initPopupWidget({url:'${calendlyUrl}'})"
+    <button onclick="Calendly.initPopupWidget({url:'${calendlyUrl.replace(/'/g, '')}'}"
             class="w-full py-4 bg-blue-600 text-white font-bold text-lg rounded-2xl hover:bg-blue-700 transition-colors mb-4">
       📅 Réserver mon appel d'onboarding →
     </button>
@@ -402,7 +447,7 @@ app.get('/onboarding', (req, res) => {
 // ═══════════════════════════════════════════════════════════════════════════
 // POST /onboarding — Réception du formulaire → email au propriétaire
 // ═══════════════════════════════════════════════════════════════════════════
-app.post('/onboarding', async (req, res) => {
+app.post('/onboarding', rateLimit(60_000, 5), async (req, res) => {
   const d = req.body;
 
   const rows = [
@@ -423,8 +468,8 @@ app.post('/onboarding', async (req, res) => {
 
   const tableRows = rows.map(([label, val]) => `
     <tr>
-      <td style="padding:10px 14px;font-weight:600;color:#374151;background:#F9FAFB;border-bottom:1px solid #E5E7EB;width:38%;vertical-align:top;">${label}</td>
-      <td style="padding:10px 14px;color:#111827;border-bottom:1px solid #E5E7EB;white-space:pre-wrap;">${val || '—'}</td>
+      <td style="padding:10px 14px;font-weight:600;color:#374151;background:#F9FAFB;border-bottom:1px solid #E5E7EB;width:38%;vertical-align:top;">${escapeHtml(label)}</td>
+      <td style="padding:10px 14px;color:#111827;border-bottom:1px solid #E5E7EB;white-space:pre-wrap;">${escapeHtml(val) || '—'}</td>
     </tr>`).join('');
 
   const html = `<!DOCTYPE html>
@@ -443,7 +488,7 @@ app.post('/onboarding', async (req, res) => {
       </table>
       <div style="margin-top:24px;padding:16px;background:#EFF6FF;border-radius:12px;">
         <p style="margin:0;color:#1E40AF;font-size:14px;font-weight:600;">📌 Prochaine étape</p>
-        <p style="margin:6px 0 0;color:#3B82F6;font-size:14px;">Contacter <strong>${d.email}</strong> pour planifier la session de configuration et mettre en place le script Vapi.</p>
+        <p style="margin:6px 0 0;color:#3B82F6;font-size:14px;">Contacter <strong>${escapeHtml(d.email)}</strong> pour planifier la session de configuration et mettre en place le script Vapi.</p>
       </div>
     </div>
   </div>
