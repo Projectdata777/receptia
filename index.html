@@ -602,9 +602,55 @@
   }
 
   // ─── Vapi Demo ─────────────────────────────────────────────────────────────
+  const VAPI_PUBLIC_KEY = '1c0b7bb0-3032-4565-b6cf-9a617b37d5b1';
+  const VAPI_ASSISTANT_ID = 'b9db6a64-1706-4384-9165-0e7e583a1ccc';
   let vapiInstance = null;
   let callActive = false;
-  const VAPI_ASSISTANT_ID = 'b9db6a64-1706-4384-9165-0e7e583a1ccc';
+
+  // Initialise Vapi une seule fois (Daily.co n'autorise qu'une instance)
+  async function getVapi() {
+    if (vapiInstance) return vapiInstance;
+    if (typeof window.Vapi === 'undefined') {
+      let waited = 0;
+      while (typeof window.Vapi === 'undefined' && waited < 5000) {
+        await new Promise(r => setTimeout(r, 200));
+        waited += 200;
+      }
+      if (typeof window.Vapi === 'undefined') throw new Error('SDK non chargé');
+    }
+    vapiInstance = new window.Vapi(VAPI_PUBLIC_KEY);
+
+    vapiInstance.on('call-start', () => {
+      callActive = true;
+      document.getElementById('vapi-start-btn').textContent = '⏹';
+      document.getElementById('vapi-status').textContent = 'Appel en cours — parlez maintenant...';
+      document.getElementById('vapi-wave').classList.remove('hidden');
+      document.getElementById('vapi-wave').classList.add('flex');
+      document.getElementById('vapi-btn-container').classList.remove('bg-primary');
+      document.getElementById('vapi-btn-container').classList.add('bg-red-500');
+    });
+
+    vapiInstance.on('call-end', () => {
+      callActive = false;
+      document.getElementById('vapi-start-btn').textContent = '📞';
+      document.getElementById('vapi-status').textContent = 'Démo terminée. Cliquez pour recommencer.';
+      document.getElementById('vapi-wave').classList.add('hidden');
+      document.getElementById('vapi-wave').classList.remove('flex');
+      document.getElementById('vapi-btn-container').classList.remove('bg-red-500');
+      document.getElementById('vapi-btn-container').classList.add('bg-primary');
+    });
+
+    vapiInstance.on('error', (e) => {
+      console.error('Vapi error:', e);
+      callActive = false;
+      document.getElementById('vapi-status').textContent = 'Erreur de connexion. Vérifiez votre micro.';
+      document.getElementById('vapi-btn-container').classList.remove('bg-red-500');
+      document.getElementById('vapi-btn-container').classList.add('bg-primary');
+      document.getElementById('vapi-start-btn').textContent = '📞';
+    });
+
+    return vapiInstance;
+  }
 
   async function startVapiDemo() {
     const btn = document.getElementById('vapi-start-btn');
@@ -612,66 +658,18 @@
     const wave = document.getElementById('vapi-wave');
 
     if (callActive) {
-      // Stopper l'appel
-      if (vapiInstance) {
-        vapiInstance.stop();
-      }
-      callActive = false;
-      btn.textContent = '📞';
-      status.textContent = 'Cliquez pour lancer la démo vocale';
-      wave.classList.add('hidden');
-      wave.classList.remove('flex');
-      document.getElementById('vapi-btn-container').classList.remove('bg-red-500');
-      document.getElementById('vapi-btn-container').classList.add('bg-primary');
+      vapiInstance && vapiInstance.stop();
       return;
     }
 
-    // Démarrer l'appel — attendre que le module esm.sh soit chargé
-    if (typeof window.Vapi === 'undefined') {
-      status.textContent = 'Chargement en cours…';
-      let waited = 0;
-      while (typeof window.Vapi === 'undefined' && waited < 5000) {
-        await new Promise(r => setTimeout(r, 200));
-        waited += 200;
-      }
-      if (typeof window.Vapi === 'undefined') {
-        status.textContent = 'Impossible de charger le SDK. Rechargez la page.';
-        return;
-      }
-    }
+    status.textContent = 'Connexion en cours…';
+    btn.disabled = true;
 
     try {
-      // Remplacer VAPI_ASSISTANT_ID_HERE par votre ID Vapi dans le fichier .env
-      // et faire un appel à votre backend pour récupérer le token si nécessaire
-      // Pour la démo, on utilise le Public Key Vapi directement
-      const VAPI_PUBLIC_KEY = '1c0b7bb0-3032-4565-b6cf-9a617b37d5b1';
-      vapiInstance = new Vapi(VAPI_PUBLIC_KEY);
+      const vapi = await getVapi();
+      vapiInstance = vapi;
 
-      vapiInstance.on('call-start', () => {
-        callActive = true;
-        btn.textContent = '⏹';
-        status.textContent = 'Appel en cours — parlez maintenant...';
-        wave.classList.remove('hidden');
-        wave.classList.add('flex');
-        document.getElementById('vapi-btn-container').classList.remove('bg-primary');
-        document.getElementById('vapi-btn-container').classList.add('bg-red-500');
-      });
-
-      vapiInstance.on('call-end', () => {
-        callActive = false;
-        btn.textContent = '📞';
-        status.textContent = 'Démo terminée. Cliquez pour recommencer.';
-        wave.classList.add('hidden');
-        wave.classList.remove('flex');
-        document.getElementById('vapi-btn-container').classList.remove('bg-red-500');
-        document.getElementById('vapi-btn-container').classList.add('bg-primary');
-      });
-
-      vapiInstance.on('error', (e) => {
-        console.error('Vapi error:', e);
-        status.textContent = 'Erreur de connexion. Vérifiez votre micro.';
-      });
-
+      btn.disabled = false;
       await vapiInstance.start(VAPI_ASSISTANT_ID, {
         firstMessage: "Bonjour ! Je suis Sofia, votre réceptionniste ReceptIA. Je réponds aux appels de votre entreprise 24h sur 24, 7 jours sur 7. Comment puis-je vous aider aujourd'hui ?",
         model: {
@@ -708,6 +706,7 @@ RÈGLES ABSOLUES :
     } catch (error) {
       console.error('Vapi start error:', error);
       status.textContent = 'Impossible de démarrer la démo. Vérifiez les permissions micro.';
+      btn.disabled = false;
     }
   }
 
