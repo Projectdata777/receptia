@@ -535,7 +535,10 @@
 <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
 <!-- Vapi SDK -->
-<script src="https://cdn.vapi.ai/vapi.js" async></script>
+<script type="module">
+  import Vapi from 'https://esm.sh/@vapi-ai/web';
+  window.Vapi = Vapi;
+</script>
 
 <script>
   // ─── Calendly ──────────────────────────────────────────────────────────────
@@ -623,10 +626,18 @@
       return;
     }
 
-    // Démarrer l'appel
-    if (typeof Vapi === 'undefined') {
-      alert('Le SDK Vapi est en cours de chargement. Réessayez dans quelques secondes.');
-      return;
+    // Démarrer l'appel — attendre que le module esm.sh soit chargé
+    if (typeof window.Vapi === 'undefined') {
+      status.textContent = 'Chargement en cours…';
+      let waited = 0;
+      while (typeof window.Vapi === 'undefined' && waited < 5000) {
+        await new Promise(r => setTimeout(r, 200));
+        waited += 200;
+      }
+      if (typeof window.Vapi === 'undefined') {
+        status.textContent = 'Impossible de charger le SDK. Rechargez la page.';
+        return;
+      }
     }
 
     try {
