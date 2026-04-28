@@ -5,7 +5,7 @@ require('dotenv').config();
 const express = require('express');
 const path    = require('path');
 const fs      = require('fs');
-const { Resend } = require('resend');
+// Email via Brevo (pas de dépendance supplémentaire — fetch natif Node 18+)
 
 const app    = express();
 
@@ -21,13 +21,26 @@ const getStripe = (() => {
   };
 })();
 
-const getResend = (() => {
-  let instance = null;
-  return () => {
-    if (!instance) instance = new Resend(process.env.RESEND_API_KEY || 're_placeholder');
-    return instance;
-  };
-})();
+async function sendBrevoEmail({ to, subject, html }) {
+  const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      'api-key': process.env.BREVO_API_KEY,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      sender: { name: 'ReceptIA', email: process.env.FROM_EMAIL },
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Brevo error ${res.status}: ${err}`);
+  }
+  return res.json();
+}
 const PORT   = process.env.PORT || 3000;
 
 const CLIENTS_FILE = path.join(__dirname, 'clients.json');
@@ -438,9 +451,8 @@ app.post('/onboarding', async (req, res) => {
 </html>`;
 
   try {
-    await getResend().emails.send({
-      from: `ReceptIA <${process.env.FROM_EMAIL || 'onboarding@resend.dev'}>`,
-      to:   [process.env.OWNER_EMAIL || 'ferykdp2004@gmail.com'],
+    await sendBrevoEmail({
+      to:      process.env.OWNER_EMAIL || 'ferykdp2004@gmail.com',
       subject: `🎯 Nouveau client onboarding — ${d.entreprise || d.email}`,
       html,
     });
@@ -473,13 +485,12 @@ async function sendWelcomeEmail(email, plan) {
   const emailHtml = buildEmailHtml({ email, plan, planLabel, calendlyUrl, onboardingFormUrl });
 
   try {
-    const result = await getResend().emails.send({
-      from:    `ReceptIA <${fromEmail}>`,
-      to:      [email],
+    const result = await sendBrevoEmail({
+      to:      email,
       subject: '🎉 Bienvenue chez ReceptIA — voici vos accès',
       html:    emailHtml,
     });
-    console.log(`[Email] Envoyé à ${email} :`, result.data?.id);
+    console.log(`[Email] Envoyé à ${email} :`, result.messageId);
   } catch (err) {
     console.error(`[Email] Erreur envoi à ${email} :`, err.message);
   }
