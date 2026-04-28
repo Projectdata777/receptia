@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReceptIA — Votre réceptionniste IA 24h/24</title>
+  <meta name="description" content="ReceptIA répond à vos appels entrants 24h/24, qualifie vos prospects et transfère les urgences. Sans secrétaire. À partir de 97€/mois." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EB',
+            'primary-dark': '#1D4ED8',
+            accent: '#10B981',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .gradient-hero { background: linear-gradient(135deg, #1e3a8a 0%, #1D4ED8 50%, #2563EB 100%); }
+    .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .accordion-content.open { max-height: 500px; }
+    .pulse-btn { animation: pulse 2s infinite; }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(37,99,235,0.4); }
+      50% { box-shadow: 0 0 0 12px rgba(37,99,235,0); }
+    }
+    .badge-proof {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+    #loading-overlay {
+      display: none;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      z-index: 9999; align-items: center; justify-content: center;
+    }
+    #loading-overlay.show { display: flex; }
+  </style>
+</head>
+<body class="bg-white text-gray-900 font-sans">
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 1. NAVBAR                              -->
+<!-- ═══════════════════════════════════════ -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+  <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2">
+      <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+        </svg>
+      </div>
+      <span class="text-xl font-bold text-gray-900">Recept<span class="text-primary">IA</span></span>
+    </a>
+    <div class="flex items-center gap-3">
+      <a href="#demo" class="hidden sm:inline-flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-primary transition-colors px-3 py-2">
+        🎧 Voir la démo
+      </a>
+      <button onclick="openCalendly()" class="inline-flex items-center gap-1 bg-primary text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors">
+        📅 Réserver un appel
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 2. HERO                                -->
+<!-- ═══════════════════════════════════════ -->
+<section class="gradient-hero text-white pt-28 pb-20 px-4">
+  <div class="max-w-4xl mx-auto text-center">
+    <div class="inline-flex items-center gap-2 badge-proof rounded-full px-4 py-2 mb-8 text-sm font-medium">
+      <span class="w-2 h-2 bg-accent rounded-full animate-pulse"></span>
+      47 PME françaises utilisent déjà ReceptIA
+    </div>
+    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+      Votre réceptionniste<br/>
+      <span class="text-accent">ne décroche plus jamais</span>
+    </h1>
+    <p class="text-xl sm:text-2xl text-blue-100 max-w-2xl mx-auto mb-10 leading-relaxed">
+      ReceptIA répond à vos appels entrants 24h/24, qualifie vos prospects
+      et transfère les urgences — sans secrétaire.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="#demo"
+         class="pulse-btn inline-flex items-center justify-center gap-2 bg-white text-primary font-bold text-lg px-8 py-4 rounded-xl hover:bg-blue-50 transition-colors">
+        🎧 Écouter la démo en direct →
+      </a>
+      <button onclick="openCalendly()"
+              class="inline-flex items-center justify-center gap-2 border-2 border-white text-white font-bold text-lg px-8 py-4 rounded-xl hover:bg-white hover:text-primary transition-colors">
+        📅 Réserver un appel gratuit
+      </button>
+    </div>
+    <p class="mt-6 text-blue-200 text-sm">Sans engagement · Résiliation en 1 clic · À partir de 97€/mois</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 3. PROBLÈME                            -->
+<!-- ═══════════════════════════════════════ -->
+<section class="py-20 px-4 bg-gray-50">
+  <div class="max-w-5xl mx-auto">
+    <p class="text-center text-sm font-semibold text-primary uppercase tracking-widest mb-3">Le problème</p>
+    <h2 class="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-14">
+      Chaque appel manqué est un client perdu
+    </h2>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center card-hover">
+        <div class="text-5xl mb-4">📵</div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Appels manqués = clients perdus</h3>
+        <p class="text-gray-500 leading-relaxed">62% des appels sans réponse ne rappellent jamais. Un prospect qui attend, c'est un prospect qui va chez le concurrent.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center card-hover">
+        <div class="text-5xl mb-4">💸</div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Une secrétaire coûte 2 000€/mois</h3>
+        <p class="text-gray-500 leading-relaxed">Charges, congés, absences, formation. ReceptIA vous coûte 30x moins cher et ne prend jamais de vacances.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center card-hover">
+        <div class="text-5xl mb-4">🔧</div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Vous ne pouvez pas décrocher en intervention</h3>
+        <p class="text-gray-500 leading-relaxed">Sur un chantier, en consultation, en réunion — votre téléphone sonne et vous ne pouvez pas répondre. ReceptIA le fait à votre place.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 4. DÉMO LIVE INTERACTIVE               -->
+<!-- ═══════════════════════════════════════ -->
+<section id="demo" class="py-20 px-4 bg-white">
+  <div class="max-w-3xl mx-auto text-center">
+    <p class="text-sm font-semibold text-primary uppercase tracking-widest mb-3">Démo en direct</p>
+    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+      Appelez votre future réceptionniste IA maintenant
+    </h2>
+    <p class="text-gray-500 text-lg mb-10">Cliquez sur le bouton ci-dessous et parlez directement à l'IA. C'est ça que vos clients entendront.</p>
+
+    <!-- Widget Vapi -->
+    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-10 shadow-inner border border-blue-100">
+      <div id="vapi-demo-widget"
+           data-vapi-id="b9db6a64-1706-4384-9165-0e7e583a1ccc"
+           class="flex flex-col items-center gap-6">
+        <div class="w-24 h-24 bg-primary rounded-full flex items-center justify-center shadow-lg shadow-blue-200" id="vapi-btn-container">
+          <button id="vapi-start-btn"
+                  onclick="startVapiDemo()"
+                  class="w-full h-full rounded-full flex items-center justify-center text-white text-4xl transition-all hover:scale-105 focus:outline-none">
+            📞
+          </button>
+        </div>
+        <div id="vapi-status" class="text-gray-600 font-medium text-lg">Cliquez pour lancer la démo vocale</div>
+        <div id="vapi-wave" class="hidden items-center gap-1">
+          <span class="w-1 h-4 bg-primary rounded animate-bounce" style="animation-delay:0s"></span>
+          <span class="w-1 h-6 bg-primary rounded animate-bounce" style="animation-delay:0.1s"></span>
+          <span class="w-1 h-8 bg-primary rounded animate-bounce" style="animation-delay:0.2s"></span>
+          <span class="w-1 h-6 bg-primary rounded animate-bounce" style="animation-delay:0.3s"></span>
+          <span class="w-1 h-4 bg-primary rounded animate-bounce" style="animation-delay:0.4s"></span>
+        </div>
+      </div>
+    </div>
+
+    <p class="mt-6 text-gray-400 text-sm">
+      ✅ Essai gratuit &nbsp;·&nbsp; ✅ Pas de carte bancaire &nbsp;·&nbsp; ✅ 2 minutes chrono
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 5. COMMENT ÇA MARCHE                  -->
+<!-- ═══════════════════════════════════════ -->
+<section class="py-20 px-4 bg-gray-50">
+  <div class="max-w-5xl mx-auto">
+    <p class="text-center text-sm font-semibold text-primary uppercase tracking-widest mb-3">Mise en place</p>
+    <h2 class="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-14">
+      Opérationnel en 24h, sans effort technique
+    </h2>
+    <div class="grid md:grid-cols-3 gap-8 relative">
+      <!-- Ligne de connexion (desktop) -->
+      <div class="hidden md:block absolute top-12 left-1/3 right-1/3 h-0.5 bg-blue-200 z-0"></div>
+
+      <div class="relative z-10 text-center">
+        <div class="w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-6 shadow-lg shadow-blue-200">1</div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Vous nous donnez votre script</h3>
+        <p class="text-gray-500 leading-relaxed">On recueille votre script d'accueil, vos règles de qualification, et les cas d'urgence à transférer. Formulaire simple, 10 minutes max.</p>
+      </div>
+      <div class="relative z-10 text-center">
+        <div class="w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-6 shadow-lg shadow-blue-200">2</div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">On configure votre IA en 24h</h3>
+        <p class="text-gray-500 leading-relaxed">Notre équipe configure votre assistant vocal, votre numéro dédié et vos règles de transfert. Vous n'avez rien à faire côté technique.</p>
+      </div>
+      <div class="relative z-10 text-center">
+        <div class="w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-6 shadow-lg shadow-blue-200">3</div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Votre IA décroche et qualifie</h3>
+        <p class="text-gray-500 leading-relaxed">ReceptIA répond, qualifie le prospect, transfère les urgences et envoie un compte-rendu par SMS/email. 24h/24, 7j/7.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 6. PRICING                             -->
+<!-- ═══════════════════════════════════════ -->
+<section id="pricing" class="py-20 px-4 bg-white">
+  <div class="max-w-5xl mx-auto">
+    <p class="text-center text-sm font-semibold text-primary uppercase tracking-widest mb-3">Tarifs</p>
+    <h2 class="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-4">
+      Un seul abonnement. Zéro surprise.
+    </h2>
+    <p class="text-center text-gray-500 mb-14 text-lg">Sans engagement · Résiliez en 1 clic à tout moment</p>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <!-- Starter -->
+      <div class="rounded-2xl border-2 border-gray-200 p-8 card-hover flex flex-col">
+        <div class="mb-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-1">Starter</h3>
+          <p class="text-gray-500 text-sm mb-4">Idéal pour démarrer</p>
+          <div class="flex items-end gap-1">
+            <span class="text-4xl font-extrabold text-gray-900">97€</span>
+            <span class="text-gray-400 mb-1">/mois</span>
+          </div>
+        </div>
+        <ul class="space-y-3 mb-8 flex-1">
+          <li class="flex items-start gap-3 text-gray-600"><span class="text-accent font-bold mt-0.5">✓</span>Jusqu'à 200 appels/mois</li>
+          <li class="flex items-start gap-3 text-gray-600"><span class="text-accent font-bold mt-0.5">✓</span>1 numéro dédié</li>
+          <li class="flex items-start gap-3 text-gray-600"><span class="text-accent font-bold mt-0.5">✓</span>Script d'accueil personnalisé</li>
+          <li class="flex items-start gap-3 text-gray-600"><span class="text-accent font-bold mt-0.5">✓</span>Compte-rendu par email</li>
+          <li class="flex items-start gap-3 text-gray-600"><span class="text-accent font-bold mt-0.5">✓</span>Support email 5j/7</li>
+        </ul>
+        <button onclick="startCheckout('starter')"
+                class="w-full py-3 px-6 border-2 border-primary text-primary font-semibold rounded-xl hover:bg-primary hover:text-white transition-colors">
+          Choisir Starter
+        </button>
+      </div>
+
+      <!-- Pro (Populaire) -->
+      <div class="rounded-2xl border-2 border-primary bg-primary p-8 card-hover flex flex-col relative shadow-xl shadow-blue-200">
+        <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+          <span class="bg-accent text-white text-xs font-bold px-4 py-1.5 rounded-full">⭐ Populaire</span>
+        </div>
+        <div class="mb-6">
+          <h3 class="text-xl font-bold text-white mb-1">Pro</h3>
+          <p class="text-blue-200 text-sm mb-4">Pour une activité en croissance</p>
+          <div class="flex items-end gap-1">
+            <span class="text-4xl font-extrabold text-white">297€</span>
+            <span class="text-blue-200 mb-1">/mois</span>
+          </div>
+        </div>
+        <ul class="space-y-3 mb-8 flex-1">
+          <li class="flex items-start gap-3 text-blue-100"><span class="text-accent font-bold mt-0.5">✓</span>Appels <strong class="text-white">illimités</strong></li>
+          <li class="flex items-start gap-3 text-blue-100"><span class="text-accent font-bold mt-0.5">✓</span>3 numéros dédiés</li>
+          <li class="flex items-start gap-3 text-blue-100"><span class="text-accent font-bold mt-0.5">✓</span>Escalade humaine automatique</li>
+          <li class="flex items-start gap-3 text-blue-100"><span class="text-accent font-bold mt-0.5">✓</span>Compte-rendu SMS + email</li>
+          <li class="flex items-start gap-3 text-blue-100"><span class="text-accent font-bold mt-0.5">✓</span>Tableau de bord analytics</li>
+          <li class="flex items-start gap-3 text-blue-100"><span class="text-accent font-bold mt-0.5">✓</span>Support prioritaire 7j/7</li>
+        </ul>
+        <button onclick="startCheckout('pro')"
+                class="w-full py-3 px-6 bg-white text-primary font-semibold rounded-xl hover:bg-blue-50 transition-colors">
+          Choisir Pro
+        </button>
+      </div>
+
+      <!-- Agency -->
+      <div class="rounded-2xl border-2 border-gray-200 p-8 card-hover flex flex-col">
+        <div class="mb-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-1">Agency</h3>
+          <p class="text-gray-500 text-sm mb-4">Pour les agences et revendeurs</p>
+          <div class="flex items-end gap-1">
+            <span class="text-4xl font-extrabold text-gray-900">697€</span>
+            <span class="text-gray-400 mb-1">/mois</span>
+          </div>
+        </div>
+        <ul class="space-y-3 mb-8 flex-1">
+          <li class="flex items-start gap-3 text-gray-600"><span class="text-accent font-bold mt-0.5">✓</span>Multi-clients illimités</li>
+          <li class="flex items-start gap-3 text-gray-600"><span class="text-accent font-bold mt-0.5">✓</span>Tableau de bord centralisé</li>
+          <li class="flex items-start gap-3 text-gray-600"><span class="text-accent font-bold mt-0.5">✓</span>Marque blanche complète</li>
+          <li class="flex items-start gap-3 text-gray-600"><span class="text-accent font-bold mt-0.5">✓</span>API d'intégration</li>
+          <li class="flex items-start gap-3 text-gray-600"><span class="text-accent font-bold mt-0.5">✓</span>Formation & onboarding dédié</li>
+          <li class="flex items-start gap-3 text-gray-600"><span class="text-accent font-bold mt-0.5">✓</span>Account manager dédié</li>
+        </ul>
+        <button onclick="startCheckout('agency')"
+                class="w-full py-3 px-6 border-2 border-primary text-primary font-semibold rounded-xl hover:bg-primary hover:text-white transition-colors">
+          Choisir Agency
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 text-gray-400 text-sm">
+      <div class="flex items-center gap-2">
+        <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+        Paiement sécurisé Stripe
+      </div>
+      <span class="hidden sm:block">·</span>
+      <div class="flex items-center gap-2">
+        <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+        Résiliation en 1 clic
+      </div>
+      <span class="hidden sm:block">·</span>
+      <div class="flex items-center gap-2">
+        <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+        Sans engagement
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 7. BOOKING APPEL DÉCOUVERTE           -->
+<!-- ═══════════════════════════════════════ -->
+<section id="booking" class="py-20 px-4" style="background: linear-gradient(135deg, #1e3a8a 0%, #1D4ED8 100%);">
+  <div class="max-w-3xl mx-auto text-center text-white">
+    <div class="text-5xl mb-6">🤝</div>
+    <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+      Pas encore convaincu ? Parlons-en en 20 minutes.
+    </h2>
+    <p class="text-blue-200 text-xl mb-10 leading-relaxed">
+      On vous montre en live comment ReceptIA s'intègre à votre activité.<br/>
+      <strong class="text-white">Sans engagement, sans pitch agressif.</strong>
+    </p>
+    <button onclick="openCalendly()"
+            class="inline-flex items-center gap-3 bg-white text-primary font-bold text-xl px-10 py-5 rounded-2xl hover:bg-blue-50 transition-colors shadow-2xl">
+      📅 Choisir un créneau →
+    </button>
+    <p class="mt-6 text-blue-300 text-sm">Disponible du lundi au vendredi · Réponse garantie sous 24h</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 8. FAQ ACCORDION                       -->
+<!-- ═══════════════════════════════════════ -->
+<section class="py-20 px-4 bg-gray-50">
+  <div class="max-w-3xl mx-auto">
+    <p class="text-center text-sm font-semibold text-primary uppercase tracking-widest mb-3">FAQ</p>
+    <h2 class="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-14">
+      Vos questions, nos réponses
+    </h2>
+
+    <div class="space-y-4" id="faq-list">
+      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+        <button onclick="toggleAccordion(this)" class="w-full text-left px-6 py-5 flex items-center justify-between font-semibold text-gray-900 hover:bg-gray-50 transition-colors">
+          <span>Est-ce que l'IA sonne vraiment humain ?</span>
+          <svg class="w-5 h-5 text-gray-400 transition-transform accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="accordion-content px-6 pb-5 text-gray-500 leading-relaxed">
+          Oui. ReceptIA utilise les voix synthétiques les plus avancées du marché (ElevenLabs / PlayHT). La majorité des appelants ne font pas la différence lors des premières secondes. La démo ci-dessus vous permet de le tester vous-même avant tout engagement.
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+        <button onclick="toggleAccordion(this)" class="w-full text-left px-6 py-5 flex items-center justify-between font-semibold text-gray-900 hover:bg-gray-50 transition-colors">
+          <span>Que se passe-t-il si l'appel est complexe ?</span>
+          <svg class="w-5 h-5 text-gray-400 transition-transform accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="accordion-content px-6 pb-5 text-gray-500 leading-relaxed">
+          ReceptIA est configurée avec vos règles d'escalade : si la situation dépasse ses capacités, elle transfère immédiatement vers votre mobile ou un membre de votre équipe. Sur le plan Pro, l'escalade humaine est automatique et intelligente. Aucun client important n'est jamais perdu.
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+        <button onclick="toggleAccordion(this)" class="w-full text-left px-6 py-5 flex items-center justify-between font-semibold text-gray-900 hover:bg-gray-50 transition-colors">
+          <span>Je n'ai pas de numéro dédié, comment ça marche ?</span>
+          <svg class="w-5 h-5 text-gray-400 transition-transform accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="accordion-content px-6 pb-5 text-gray-500 leading-relaxed">
+          On vous fournit un numéro de téléphone français dédié (fixe ou mobile, selon votre préférence). Vous pouvez soit communiquer ce numéro à vos clients, soit configurer un renvoi d'appel depuis votre numéro actuel. La mise en place prend moins de 10 minutes.
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+        <button onclick="toggleAccordion(this)" class="w-full text-left px-6 py-5 flex items-center justify-between font-semibold text-gray-900 hover:bg-gray-50 transition-colors">
+          <span>Puis-je changer de formule ?</span>
+          <svg class="w-5 h-5 text-gray-400 transition-transform accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="accordion-content px-6 pb-5 text-gray-500 leading-relaxed">
+          Oui, à tout moment. Vous pouvez passer d'une formule à l'autre (upgrade ou downgrade) depuis votre espace client, avec effet immédiat. La différence de prix est calculée au prorata du mois en cours.
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+        <button onclick="toggleAccordion(this)" class="w-full text-left px-6 py-5 flex items-center justify-between font-semibold text-gray-900 hover:bg-gray-50 transition-colors">
+          <span>Y a-t-il un engagement ?</span>
+          <svg class="w-5 h-5 text-gray-400 transition-transform accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="accordion-content px-6 pb-5 text-gray-500 leading-relaxed">
+          Aucun engagement. ReceptIA fonctionne en abonnement mensuel, résiliable à tout moment en un seul clic depuis votre espace client. Pas de frais de résiliation, pas de préavis.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 9. TESTIMONIALS                        -->
+<!-- ═══════════════════════════════════════ -->
+<section class="py-20 px-4 bg-white">
+  <div class="max-w-5xl mx-auto">
+    <p class="text-center text-sm font-semibold text-primary uppercase tracking-widest mb-3">Témoignages</p>
+    <h2 class="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-14">
+      Ils ont arrêté de manquer des appels
+    </h2>
+    <div class="grid md:grid-cols-3 gap-8">
+
+      <div class="bg-gray-50 rounded-2xl p-8 card-hover border border-gray-100">
+        <div class="flex items-center gap-1 text-yellow-400 mb-4">★★★★★</div>
+        <p class="text-gray-700 leading-relaxed mb-6 italic">"Avant, je manquais au moins 3-4 appels par jour quand j'étais sur un chantier. Depuis ReceptIA, mes clients sont pris en charge immédiatement. J'ai eu 2 nouveaux chantiers signés le premier mois."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">TM</div>
+          <div>
+            <p class="font-semibold text-gray-900">Thomas M.</p>
+            <p class="text-sm text-gray-500">Plombier-chauffagiste · Lyon</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 rounded-2xl p-8 card-hover border border-gray-100">
+        <div class="flex items-center gap-1 text-yellow-400 mb-4">★★★★★</div>
+        <p class="text-gray-700 leading-relaxed mb-6 italic">"Mon cabinet reçoit 30 à 40 appels par jour. ReceptIA gère les demandes de RDV, les demandes d'info et filtre les urgences. Mes patients sont satisfaits et j'ai enfin du temps pour me concentrer sur les consultations."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-white font-bold text-sm">SB</div>
+          <div>
+            <p class="font-semibold text-gray-900">Sophie B.</p>
+            <p class="text-sm text-gray-500">Ostéopathe D.O. · Paris 15e</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 rounded-2xl p-8 card-hover border border-gray-100">
+        <div class="flex items-center gap-1 text-yellow-400 mb-4">★★★★★</div>
+        <p class="text-gray-700 leading-relaxed mb-6 italic">"On a testé 2 semaines en parallèle avec notre assistante. ReceptIA répondait plus vite et ne se trompait jamais sur les informations. On a gardé les deux, mais l'IA gère 80% des appels entrants. ROI immédiat."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-sm">MR</div>
+          <div>
+            <p class="font-semibold text-gray-900">Marc R.</p>
+            <p class="text-sm text-gray-500">Directeur · Agence Immobilière · Bordeaux</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA final avant footer -->
+    <div class="mt-16 text-center">
+      <p class="text-gray-500 mb-6 text-lg">Rejoignez les 47 PME qui ne manquent plus jamais un appel</p>
+      <button onclick="openCalendly()"
+              class="inline-flex items-center gap-2 bg-primary text-white font-bold text-lg px-10 py-4 rounded-2xl hover:bg-primary-dark transition-colors shadow-lg shadow-blue-200">
+        📅 Réserver mon appel gratuit →
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 10. FOOTER                             -->
+<!-- ═══════════════════════════════════════ -->
+<footer class="bg-gray-900 text-gray-400 py-12 px-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+          </svg>
+        </div>
+        <span class="text-white font-bold text-lg">Recept<span class="text-primary">IA</span></span>
+      </div>
+
+      <!-- Paiement sécurisé -->
+      <div class="flex items-center gap-4">
+        <span class="text-xs text-gray-500">Paiement sécurisé</span>
+        <!-- Stripe -->
+        <svg class="h-6" viewBox="0 0 60 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="60" height="25" rx="4" fill="#635BFF"/>
+          <text x="8" y="17" fill="white" font-family="Arial" font-weight="bold" font-size="11">stripe</text>
+        </svg>
+        <!-- Visa -->
+        <svg class="h-6" viewBox="0 0 60 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="60" height="25" rx="4" fill="#1A1F71"/>
+          <text x="10" y="18" fill="white" font-family="Arial" font-weight="bold" font-size="14" font-style="italic">VISA</text>
+        </svg>
+        <!-- Mastercard -->
+        <svg class="h-6" viewBox="0 0 60 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="60" height="25" rx="4" fill="#252525"/>
+          <circle cx="22" cy="12.5" r="9" fill="#EB001B"/>
+          <circle cx="38" cy="12.5" r="9" fill="#F79E1B"/>
+          <path d="M30 5.7a9 9 0 010 13.6A9 9 0 0130 5.7z" fill="#FF5F00"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-sm">© 2025 ReceptIA — Tous droits réservés</p>
+      <div class="flex items-center gap-6 text-sm">
+        <a href="#" onclick="event.preventDefault();openModal('mentions')" class="hover:text-white transition-colors">Mentions légales</a>
+        <a href="#" onclick="event.preventDefault();openModal('cgv')" class="hover:text-white transition-colors">CGV</a>
+        <a href="#" onclick="event.preventDefault();openModal('confidentialite')" class="hover:text-white transition-colors">Politique de confidentialité</a>
+        <a href="mailto:contact@receptia.fr" class="hover:text-white transition-colors">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- MODAUX LÉGAUX                          -->
+<!-- ═══════════════════════════════════════ -->
+<div id="modal-overlay" onclick="closeModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center;padding:16px;"></div>
+
+<div id="modal-legal" style="display:none;position:fixed;inset:0;z-index:1001;overflow-y:auto;padding:40px 16px;">
+  <div class="bg-white rounded-2xl max-w-2xl mx-auto p-8 shadow-2xl relative">
+    <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors text-lg font-bold">×</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- LOADING OVERLAY                        -->
+<!-- ═══════════════════════════════════════ -->
+<div id="loading-overlay">
+  <div class="bg-white rounded-2xl p-8 text-center shadow-2xl max-w-sm mx-4">
+    <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+    <p class="font-semibold text-gray-900 mb-1">Redirection vers le paiement sécurisé...</p>
+    <p class="text-gray-400 text-sm">Vous allez être redirigé vers Stripe</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SCRIPTS                                -->
+<!-- ═══════════════════════════════════════ -->
+
+<!-- Calendly -->
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet"/>
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+<!-- Vapi SDK -->
+<script src="https://cdn.vapi.ai/vapi.js" async></script>
+
+<script>
+  // ─── Calendly ──────────────────────────────────────────────────────────────
+  const CALENDLY_URL = 'https://calendly.com/prospexxagency/appel-decouverte-receptia-20-min';
+
+  function openCalendly() {
+    if (typeof Calendly !== 'undefined') {
+      Calendly.initPopupWidget({ url: CALENDLY_URL });
+    } else {
+      // Fallback si le script Calendly n'est pas encore chargé
+      window.open(CALENDLY_URL, '_blank');
+    }
+  }
+
+  // ─── Stripe Checkout ───────────────────────────────────────────────────────
+  async function startCheckout(plan) {
+    const overlay = document.getElementById('loading-overlay');
+    overlay.classList.add('show');
+
+    try {
+      const email = prompt('Entrez votre email pour continuer :');
+      if (!email || !email.includes('@')) {
+        overlay.classList.remove('show');
+        alert('Veuillez entrer un email valide.');
+        return;
+      }
+
+      const response = await fetch('/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan, email })
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || 'Erreur lors de la création du paiement.');
+      }
+
+      const { url } = await response.json();
+      window.location.href = url;
+    } catch (error) {
+      overlay.classList.remove('show');
+      alert('Une erreur est survenue : ' + error.message);
+    }
+  }
+
+  // ─── FAQ Accordion ─────────────────────────────────────────────────────────
+  function toggleAccordion(btn) {
+    const content = btn.nextElementSibling;
+    const icon = btn.querySelector('.accordion-icon');
+    const isOpen = content.classList.contains('open');
+
+    // Fermer tous
+    document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('open'));
+    document.querySelectorAll('.accordion-icon').forEach(i => i.style.transform = '');
+
+    if (!isOpen) {
+      content.classList.add('open');
+      icon.style.transform = 'rotate(180deg)';
+    }
+  }
+
+  // ─── Vapi Demo ─────────────────────────────────────────────────────────────
+  let vapiInstance = null;
+  let callActive = false;
+  const VAPI_ASSISTANT_ID = 'b9db6a64-1706-4384-9165-0e7e583a1ccc';
+
+  async function startVapiDemo() {
+    const btn = document.getElementById('vapi-start-btn');
+    const status = document.getElementById('vapi-status');
+    const wave = document.getElementById('vapi-wave');
+
+    if (callActive) {
+      // Stopper l'appel
+      if (vapiInstance) {
+        vapiInstance.stop();
+      }
+      callActive = false;
+      btn.textContent = '📞';
+      status.textContent = 'Cliquez pour lancer la démo vocale';
+      wave.classList.add('hidden');
+      wave.classList.remove('flex');
+      document.getElementById('vapi-btn-container').classList.remove('bg-red-500');
+      document.getElementById('vapi-btn-container').classList.add('bg-primary');
+      return;
+    }
+
+    // Démarrer l'appel
+    if (typeof Vapi === 'undefined') {
+      alert('Le SDK Vapi est en cours de chargement. Réessayez dans quelques secondes.');
+      return;
+    }
+
+    try {
+      // Remplacer VAPI_ASSISTANT_ID_HERE par votre ID Vapi dans le fichier .env
+      // et faire un appel à votre backend pour récupérer le token si nécessaire
+      // Pour la démo, on utilise le Public Key Vapi directement
+      const VAPI_PUBLIC_KEY = '1c0b7bb0-3032-4565-b6cf-9a617b37d5b1';
+      vapiInstance = new Vapi(VAPI_PUBLIC_KEY);
+
+      vapiInstance.on('call-start', () => {
+        callActive = true;
+        btn.textContent = '⏹';
+        status.textContent = 'Appel en cours — parlez maintenant...';
+        wave.classList.remove('hidden');
+        wave.classList.add('flex');
+        document.getElementById('vapi-btn-container').classList.remove('bg-primary');
+        document.getElementById('vapi-btn-container').classList.add('bg-red-500');
+      });
+
+      vapiInstance.on('call-end', () => {
+        callActive = false;
+        btn.textContent = '📞';
+        status.textContent = 'Démo terminée. Cliquez pour recommencer.';
+        wave.classList.add('hidden');
+        wave.classList.remove('flex');
+        document.getElementById('vapi-btn-container').classList.remove('bg-red-500');
+        document.getElementById('vapi-btn-container').classList.add('bg-primary');
+      });
+
+      vapiInstance.on('error', (e) => {
+        console.error('Vapi error:', e);
+        status.textContent = 'Erreur de connexion. Vérifiez votre micro.';
+      });
+
+      await vapiInstance.start(VAPI_ASSISTANT_ID);
+
+    } catch (error) {
+      console.error('Vapi start error:', error);
+      status.textContent = 'Impossible de démarrer la démo. Vérifiez les permissions micro.';
+    }
+  }
+
+  // ─── Smooth scroll navbar ──────────────────────────────────────────────────
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (href === '#') return; // laisse les liens # purs sans action
+      const target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // ─── Modaux légaux ─────────────────────────────────────────────────────────
+  const LEGAL_CONTENT = {
+    mentions: `
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Mentions légales</h2>
+      <div class="space-y-4 text-gray-600 text-sm leading-relaxed">
+        <div><p class="font-semibold text-gray-800 mb-1">Éditeur du site</p>
+        <p>ReceptIA — SAS au capital de 1 000€<br/>Siège social : France<br/>Email : contact@receptia.fr</p></div>
+        <div><p class="font-semibold text-gray-800 mb-1">Hébergement</p>
+        <p>Render Services Inc.<br/>525 Brannan St, San Francisco, CA 94107, USA</p></div>
+        <div><p class="font-semibold text-gray-800 mb-1">Directeur de la publication</p>
+        <p>Le représentant légal de la société ReceptIA</p></div>
+        <div><p class="font-semibold text-gray-800 mb-1">Propriété intellectuelle</p>
+        <p>L'ensemble du contenu de ce site (textes, images, logos) est la propriété exclusive de ReceptIA et est protégé par les lois françaises et internationales relatives à la propriété intellectuelle.</p></div>
+        <div><p class="font-semibold text-gray-800 mb-1">Données personnelles</p>
+        <p>Conformément au RGPD et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Pour exercer ce droit : contact@receptia.fr</p></div>
+      </div>`,
+    cgv: `
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Conditions Générales de Vente</h2>
+      <div class="space-y-4 text-gray-600 text-sm leading-relaxed">
+        <div><p class="font-semibold text-gray-800 mb-1">1. Objet</p>
+        <p>Les présentes CGV régissent les relations contractuelles entre ReceptIA et ses clients pour la fourniture du service de réceptionniste IA.</p></div>
+        <div><p class="font-semibold text-gray-800 mb-1">2. Abonnements</p>
+        <p>Les abonnements sont sans engagement et facturés mensuellement. Le client peut résilier à tout moment depuis son espace client, avec effet à la fin de la période en cours.</p></div>
+        <div><p class="font-semibold text-gray-800 mb-1">3. Tarifs</p>
+        <p>Starter : 97€/mois — Pro : 297€/mois — Agency : 697€/mois. Prix TTC. ReceptIA se réserve le droit de modifier ses tarifs avec un préavis de 30 jours.</p></div>
+        <div><p class="font-semibold text-gray-800 mb-1">4. Paiement</p>
+        <p>Le paiement est effectué par carte bancaire via Stripe. ReceptIA ne stocke aucune donnée bancaire.</p></div>
+        <div><p class="font-semibold text-gray-800 mb-1">5. Droit de rétractation</p>
+        <p>Conformément à l'article L221-28 du Code de la Consommation, le droit de rétractation ne s'applique pas aux services numériques dont l'exécution a commencé.</p></div>
+        <div><p class="font-semibold text-gray-800 mb-1">6. Responsabilité</p>
+        <p>ReceptIA s'engage à fournir le service avec le niveau de disponibilité le plus élevé possible. En cas d'interruption, la responsabilité de ReceptIA est limitée au remboursement au prorata de la période d'indisponibilité.</p></div>
+        <div><p class="font-semibold text-gray-800 mb-1">7. Droit applicable</p>
+        <p>Les présentes CGV sont soumises au droit français. Tout litige relève de la compétence exclusive des tribunaux français.</p></div>
+      </div>`,
+    confidentialite: `
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Politique de confidentialité</h2>
+      <div class="space-y-4 text-gray-600 text-sm leading-relaxed">
+        <div><p class="font-semibold text-gray-800 mb-1">Données collectées</p>
+        <p>ReceptIA collecte les données suivantes : adresse email (lors de l'abonnement), informations de facturation (traitées par Stripe), enregistrements d'appels (dans la limite du service souscrit).</p></div>
+        <div><p class="font-semibold text-gray-800 mb-1">Utilisation des données</p>
+        <p>Vos données sont utilisées exclusivement pour : la fourniture du service, l'envoi des confirmations et comptes-rendus, la facturation et le support client.</p></div>
+        <div><p class="font-semibold text-gray-800 mb-1">Partage des données</p>
+        <p>Nous partageons vos données avec : Stripe (paiement), Resend (emails transactionnels), Vapi (traitement vocal). Ces sous-traitants sont conformes au RGPD.</p></div>
+        <div><p class="font-semibold text-gray-800 mb-1">Conservation</p>
+        <p>Vos données sont conservées pendant la durée de l'abonnement + 3 ans à des fins légales.</p></div>
+        <div><p class="font-semibold text-gray-800 mb-1">Vos droits</p>
+        <p>Vous disposez des droits d'accès, rectification, effacement, portabilité et opposition. Exercez ces droits à : contact@receptia.fr</p></div>
+        <div><p class="font-semibold text-gray-800 mb-1">Cookies</p>
+        <p>Ce site utilise uniquement des cookies techniques nécessaires au fonctionnement (pas de cookies publicitaires, pas de tracking tiers).</p></div>
+      </div>`
+  };
+
+  function openModal(type) {
+    const overlay = document.getElementById('modal-overlay');
+    const modal   = document.getElementById('modal-legal');
+    const content = document.getElementById('modal-content');
+    content.innerHTML = LEGAL_CONTENT[type] || '';
+    overlay.style.display = 'block';
+    modal.style.display   = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').style.display = 'none';
+    document.getElementById('modal-legal').style.display   = 'none';
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+
+</body>
+</html>
