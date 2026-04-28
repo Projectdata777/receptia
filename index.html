@@ -137,7 +137,7 @@
   <div class="max-w-3xl mx-auto text-center">
     <p class="text-sm font-semibold text-primary uppercase tracking-widest mb-3">Démo en direct</p>
     <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-      Écoutez Sofia — votre future réceptionniste IA
+      Écoutez Lucas — votre futur réceptionniste IA
     </h2>
     <p class="text-gray-500 text-lg mb-10">Appuyez sur play et écoutez ce que vos clients entendront lorsqu'ils appellent votre entreprise.</p>
 
@@ -149,9 +149,9 @@
         <p class="text-xs font-bold text-primary uppercase tracking-widest mb-3">Scénario simulé</p>
         <div class="space-y-2 text-sm text-gray-600">
           <div class="flex gap-2"><span class="font-semibold text-gray-400 w-16 shrink-0">Client :</span><span>Bonjour, je voudrais prendre rendez-vous avec le docteur Morin.</span></div>
-          <div class="flex gap-2"><span class="font-semibold text-blue-600 w-16 shrink-0">Sofia :</span><span class="text-gray-800">Bonjour, cabinet médical Saint-Martin, Sofia à votre service…</span></div>
+          <div class="flex gap-2"><span class="font-semibold text-blue-600 w-16 shrink-0">Lucas :</span><span class="text-gray-800">Bonjour, cabinet médical Saint-Martin, Lucas à votre service…</span></div>
           <div class="flex gap-2"><span class="font-semibold text-gray-400 w-16 shrink-0">Client :</span><span>Vendredi matin ça m'irait très bien.</span></div>
-          <div class="flex gap-2"><span class="font-semibold text-blue-600 w-16 shrink-0">Sofia :</span><span class="text-gray-800">Parfait, je note… Confirmé !</span></div>
+          <div class="flex gap-2"><span class="font-semibold text-blue-600 w-16 shrink-0">Lucas :</span><span class="text-gray-800">Parfait, je note… Confirmé !</span></div>
         </div>
       </div>
 
@@ -183,7 +183,7 @@
           <span class="w-1 h-3 bg-primary rounded animate-bounce" style="animation-delay:0.6s"></span>
         </div>
 
-        <p id="audio-status" class="text-gray-500 font-medium">Appuyez pour écouter Sofia</p>
+        <p id="audio-status" class="text-gray-500 font-medium">Appuyez pour écouter Lucas</p>
       </div>
 
       <audio id="sofia-audio" src="/demo_sofia.mp3" preload="metadata"></audio>
@@ -651,7 +651,7 @@
     audio.addEventListener('play', () => {
       isPlaying = true;
       document.getElementById('play-icon').textContent = '⏸';
-      document.getElementById('audio-status').textContent = 'Sofia parle…';
+      document.getElementById('audio-status').textContent = 'Lucas parle…';
       document.getElementById('audio-wave').classList.remove('hidden');
       document.getElementById('audio-wave').classList.add('flex');
       document.getElementById('play-btn').classList.add('bg-red-500');
