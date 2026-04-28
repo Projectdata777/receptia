@@ -137,35 +137,60 @@
   <div class="max-w-3xl mx-auto text-center">
     <p class="text-sm font-semibold text-primary uppercase tracking-widest mb-3">Démo en direct</p>
     <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-      Appelez votre future réceptionniste IA maintenant
+      Écoutez Sofia — votre future réceptionniste IA
     </h2>
-    <p class="text-gray-500 text-lg mb-10">Cliquez sur le bouton ci-dessous et parlez directement à l'IA. C'est ça que vos clients entendront.</p>
+    <p class="text-gray-500 text-lg mb-10">Appuyez sur play et écoutez ce que vos clients entendront lorsqu'ils appellent votre entreprise.</p>
 
-    <!-- Widget Vapi -->
+    <!-- Audio player démo -->
     <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-10 shadow-inner border border-blue-100">
-      <div id="vapi-demo-widget"
-           data-vapi-id="b9db6a64-1706-4384-9165-0e7e583a1ccc"
-           class="flex flex-col items-center gap-6">
-        <div class="w-24 h-24 bg-primary rounded-full flex items-center justify-center shadow-lg shadow-blue-200" id="vapi-btn-container">
-          <button id="vapi-start-btn"
-                  onclick="startVapiDemo()"
-                  class="w-full h-full rounded-full flex items-center justify-center text-white text-4xl transition-all hover:scale-105 focus:outline-none">
-            📞
-          </button>
-        </div>
-        <div id="vapi-status" class="text-gray-600 font-medium text-lg">Cliquez pour lancer la démo vocale</div>
-        <div id="vapi-wave" class="hidden items-center gap-1">
-          <span class="w-1 h-4 bg-primary rounded animate-bounce" style="animation-delay:0s"></span>
-          <span class="w-1 h-6 bg-primary rounded animate-bounce" style="animation-delay:0.1s"></span>
-          <span class="w-1 h-8 bg-primary rounded animate-bounce" style="animation-delay:0.2s"></span>
-          <span class="w-1 h-6 bg-primary rounded animate-bounce" style="animation-delay:0.3s"></span>
-          <span class="w-1 h-4 bg-primary rounded animate-bounce" style="animation-delay:0.4s"></span>
+
+      <!-- Scénario affiché -->
+      <div class="bg-white rounded-2xl p-5 mb-8 text-left border border-blue-100">
+        <p class="text-xs font-bold text-primary uppercase tracking-widest mb-3">Scénario simulé</p>
+        <div class="space-y-2 text-sm text-gray-600">
+          <div class="flex gap-2"><span class="font-semibold text-gray-400 w-16 shrink-0">Client :</span><span>Bonjour, je voudrais prendre rendez-vous avec le docteur Morin.</span></div>
+          <div class="flex gap-2"><span class="font-semibold text-blue-600 w-16 shrink-0">Sofia :</span><span class="text-gray-800">Bonjour, cabinet médical Saint-Martin, Sofia à votre service…</span></div>
+          <div class="flex gap-2"><span class="font-semibold text-gray-400 w-16 shrink-0">Client :</span><span>Vendredi matin ça m'irait très bien.</span></div>
+          <div class="flex gap-2"><span class="font-semibold text-blue-600 w-16 shrink-0">Sofia :</span><span class="text-gray-800">Parfait, je note… Confirmé !</span></div>
         </div>
       </div>
+
+      <!-- Player -->
+      <div class="flex flex-col items-center gap-5">
+        <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center shadow-lg shadow-blue-200 cursor-pointer hover:scale-105 transition-transform" id="play-btn" onclick="toggleAudio()">
+          <span id="play-icon" class="text-white text-3xl">▶</span>
+        </div>
+
+        <!-- Barre de progression -->
+        <div class="w-full max-w-md">
+          <div class="flex justify-between text-xs text-gray-400 mb-1">
+            <span id="audio-time">0:00</span>
+            <span id="audio-dur">--:--</span>
+          </div>
+          <div class="w-full bg-blue-100 rounded-full h-2 cursor-pointer" onclick="seekAudio(event)" id="progress-bar">
+            <div id="progress-fill" class="bg-primary h-2 rounded-full transition-all" style="width:0%"></div>
+          </div>
+        </div>
+
+        <!-- Ondes d'animation -->
+        <div id="audio-wave" class="hidden items-center gap-1 mt-1">
+          <span class="w-1 h-4 bg-primary rounded animate-bounce" style="animation-delay:0s"></span>
+          <span class="w-1 h-7 bg-primary rounded animate-bounce" style="animation-delay:0.1s"></span>
+          <span class="w-1 h-5 bg-primary rounded animate-bounce" style="animation-delay:0.2s"></span>
+          <span class="w-1 h-8 bg-primary rounded animate-bounce" style="animation-delay:0.3s"></span>
+          <span class="w-1 h-4 bg-primary rounded animate-bounce" style="animation-delay:0.4s"></span>
+          <span class="w-1 h-6 bg-primary rounded animate-bounce" style="animation-delay:0.5s"></span>
+          <span class="w-1 h-3 bg-primary rounded animate-bounce" style="animation-delay:0.6s"></span>
+        </div>
+
+        <p id="audio-status" class="text-gray-500 font-medium">Appuyez pour écouter Sofia</p>
+      </div>
+
+      <audio id="sofia-audio" src="/demo_sofia.mp3" preload="metadata"></audio>
     </div>
 
     <p class="mt-6 text-gray-400 text-sm">
-      ✅ Essai gratuit &nbsp;·&nbsp; ✅ Pas de carte bancaire &nbsp;·&nbsp; ✅ 2 minutes chrono
+      ✅ Voix naturelle IA &nbsp;·&nbsp; ✅ Configurée à votre image &nbsp;·&nbsp; ✅ Opérationnelle en 24h
     </p>
   </div>
 </section>
@@ -534,11 +559,6 @@
 <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet"/>
 <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
-<!-- Vapi SDK -->
-<script type="module">
-  import Vapi from 'https://esm.sh/@vapi-ai/web';
-  window.Vapi = Vapi;
-</script>
 
 <script>
   // ─── Calendly ──────────────────────────────────────────────────────────────
@@ -601,132 +621,75 @@
     }
   }
 
-  // ─── Vapi Demo ─────────────────────────────────────────────────────────────
-  const VAPI_PUBLIC_KEY = '1c0b7bb0-3032-4565-b6cf-9a617b37d5b1';
-  const VAPI_ASSISTANT_ID = 'b9db6a64-1706-4384-9165-0e7e583a1ccc';
-  let vapiInstance = null;
-  let callActive = false;
+  // ─── Audio Demo Player ────────────────────────────────────────────────────
+  const audio = document.getElementById('sofia-audio');
+  let isPlaying = false;
 
-  // Initialise Vapi une seule fois (Daily.co n'autorise qu'une instance)
-  async function getVapi() {
-    if (vapiInstance) return vapiInstance;
-    if (typeof window.Vapi === 'undefined') {
-      let waited = 0;
-      while (typeof window.Vapi === 'undefined' && waited < 5000) {
-        await new Promise(r => setTimeout(r, 200));
-        waited += 200;
-      }
-      if (typeof window.Vapi === 'undefined') throw new Error('SDK non chargé');
+  function toggleAudio() {
+    if (!audio) return;
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play();
     }
-    vapiInstance = new window.Vapi(VAPI_PUBLIC_KEY);
-
-    vapiInstance.on('call-start', () => {
-      callActive = true;
-      document.getElementById('vapi-start-btn').textContent = '⏹';
-      document.getElementById('vapi-status').textContent = 'Appel en cours — parlez maintenant...';
-      document.getElementById('vapi-wave').classList.remove('hidden');
-      document.getElementById('vapi-wave').classList.add('flex');
-      document.getElementById('vapi-btn-container').classList.remove('bg-primary');
-      document.getElementById('vapi-btn-container').classList.add('bg-red-500');
-    });
-
-    vapiInstance.on('call-end', () => {
-      callActive = false;
-      document.getElementById('vapi-start-btn').textContent = '📞';
-      document.getElementById('vapi-status').textContent = 'Démo terminée. Cliquez pour recommencer.';
-      document.getElementById('vapi-wave').classList.add('hidden');
-      document.getElementById('vapi-wave').classList.remove('flex');
-      document.getElementById('vapi-btn-container').classList.remove('bg-red-500');
-      document.getElementById('vapi-btn-container').classList.add('bg-primary');
-    });
-
-    vapiInstance.on('error', (e) => {
-      console.error('Vapi error:', JSON.stringify(e));
-      callActive = false;
-      const raw = e?.error?.message || e?.message || e?.type || '';
-      const msg = raw.toLowerCase().includes('permission') || raw.toLowerCase().includes('micro') || raw.toLowerCase().includes('device')
-        ? 'Microphone bloqué — autorisez-le dans le cadenas 🔒 de la barre d\'adresse'
-        : 'Erreur de connexion — autorisez le microphone (🔒 dans la barre d\'adresse)';
-      document.getElementById('vapi-status').textContent = msg;
-      document.getElementById('vapi-btn-container').classList.remove('bg-red-500');
-      document.getElementById('vapi-btn-container').classList.add('bg-primary');
-      document.getElementById('vapi-start-btn').textContent = '📞';
-    });
-
-    return vapiInstance;
   }
 
-  async function startVapiDemo() {
-    const btn = document.getElementById('vapi-start-btn');
-    const status = document.getElementById('vapi-status');
-    const wave = document.getElementById('vapi-wave');
+  function seekAudio(e) {
+    if (!audio || !audio.duration) return;
+    const bar = document.getElementById('progress-bar');
+    const rect = bar.getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = ratio * audio.duration;
+  }
 
-    if (callActive) {
-      vapiInstance && vapiInstance.stop();
-      return;
-    }
+  function formatTime(s) {
+    const m = Math.floor(s / 60);
+    return m + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+  }
 
-    status.textContent = 'Autorisation du micro…';
-    btn.disabled = true;
+  if (audio) {
+    audio.addEventListener('play', () => {
+      isPlaying = true;
+      document.getElementById('play-icon').textContent = '⏸';
+      document.getElementById('audio-status').textContent = 'Sofia parle…';
+      document.getElementById('audio-wave').classList.remove('hidden');
+      document.getElementById('audio-wave').classList.add('flex');
+      document.getElementById('play-btn').classList.add('bg-red-500');
+      document.getElementById('play-btn').classList.remove('bg-primary');
+    });
 
-    // Demander la permission micro explicitement avant Vapi
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach(t => t.stop()); // libérer immédiatement
-    } catch (micErr) {
-      status.textContent = 'Microphone bloqué — cliquez sur 🔒 dans la barre d\'adresse → Autoriser le micro';
-      btn.disabled = false;
-      return;
-    }
+    audio.addEventListener('pause', () => {
+      isPlaying = false;
+      document.getElementById('play-icon').textContent = '▶';
+      document.getElementById('audio-status').textContent = 'En pause — appuyez pour reprendre';
+      document.getElementById('audio-wave').classList.add('hidden');
+      document.getElementById('audio-wave').classList.remove('flex');
+      document.getElementById('play-btn').classList.remove('bg-red-500');
+      document.getElementById('play-btn').classList.add('bg-primary');
+    });
 
-    status.textContent = 'Connexion en cours…';
+    audio.addEventListener('ended', () => {
+      isPlaying = false;
+      document.getElementById('play-icon').textContent = '▶';
+      document.getElementById('audio-status').textContent = 'Démo terminée — cliquez pour rejouer';
+      document.getElementById('audio-wave').classList.add('hidden');
+      document.getElementById('audio-wave').classList.remove('flex');
+      document.getElementById('play-btn').classList.remove('bg-red-500');
+      document.getElementById('play-btn').classList.add('bg-primary');
+      document.getElementById('progress-fill').style.width = '0%';
+      audio.currentTime = 0;
+    });
 
-    try {
-      const vapi = await getVapi();
-      vapiInstance = vapi;
+    audio.addEventListener('timeupdate', () => {
+      if (!audio.duration) return;
+      const pct = (audio.currentTime / audio.duration) * 100;
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('audio-time').textContent = formatTime(audio.currentTime);
+    });
 
-      btn.disabled = false;
-      await vapiInstance.start({
-        name: "Sofia",
-        firstMessage: "Bonjour ! Je suis Sofia, votre réceptionniste ReceptIA. Je réponds aux appels de votre entreprise 24h sur 24, 7 jours sur 7. Comment puis-je vous aider aujourd'hui ?",
-        transcriber: {
-          provider: "deepgram",
-          model: "nova-2",
-          language: "fr"
-        },
-        model: {
-          provider: "openai",
-          model: "gpt-4o-mini",
-          messages: [
-            {
-              role: "system",
-              content: `Tu es Sofia, une réceptionniste IA ultra-professionnelle créée par ReceptIA. Tu fais la démonstration de ce que ReceptIA peut faire pour les PME françaises.
-
-CONTEXTE : ReceptIA répond aux appels entrants 24h/24, 7j/7, sans secrétaire humaine. Formules : 97€/mois (Starter), 297€/mois (Pro), 697€/mois (Agency).
-
-COMPORTEMENT :
-- Chaleureuse, professionnelle, naturelle — jamais robotique
-- Français impeccable, ton humain et bienveillant
-- Réponses courtes : 2-3 phrases maximum
-- Si on demande le tarif : "Nos formules commencent à 97€/mois"
-- Si on veut parler à un humain : "Je transfère votre appel, un instant"
-- Après 2-3 échanges, propose : "Souhaitez-vous voir comment ReceptIA pourrait être configurée pour votre entreprise ?"
-
-RÈGLES : Ne mentionne jamais OpenAI, GPT, Claude, ni que tu es une IA. Tu es une réceptionniste.`
-            }
-          ]
-        },
-        voice: {
-          provider: "11labs",
-          voiceId: "21m00Tcm4TlvDq8ikWAM"
-        }
-      });
-
-    } catch (error) {
-      console.error('Vapi start error:', error);
-      status.textContent = 'Impossible de démarrer la démo. Vérifiez les permissions micro.';
-      btn.disabled = false;
-    }
+    audio.addEventListener('loadedmetadata', () => {
+      document.getElementById('audio-dur').textContent = formatTime(audio.duration);
+    });
   }
 
   // ─── Smooth scroll navbar ──────────────────────────────────────────────────
