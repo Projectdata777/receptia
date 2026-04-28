@@ -643,8 +643,11 @@
     vapiInstance.on('error', (e) => {
       console.error('Vapi error:', JSON.stringify(e));
       callActive = false;
-      const msg = e?.error?.message || e?.message || e?.type || JSON.stringify(e).substring(0, 80);
-      document.getElementById('vapi-status').textContent = 'Erreur: ' + msg;
+      const raw = e?.error?.message || e?.message || e?.type || '';
+      const msg = raw.toLowerCase().includes('permission') || raw.toLowerCase().includes('micro') || raw.toLowerCase().includes('device')
+        ? 'Microphone bloqué — autorisez-le dans le cadenas 🔒 de la barre d\'adresse'
+        : 'Erreur de connexion — autorisez le microphone (🔒 dans la barre d\'adresse)';
+      document.getElementById('vapi-status').textContent = msg;
       document.getElementById('vapi-btn-container').classList.remove('bg-red-500');
       document.getElementById('vapi-btn-container').classList.add('bg-primary');
       document.getElementById('vapi-start-btn').textContent = '📞';
@@ -663,8 +666,20 @@
       return;
     }
 
-    status.textContent = 'Connexion en cours…';
+    status.textContent = 'Autorisation du micro…';
     btn.disabled = true;
+
+    // Demander la permission micro explicitement avant Vapi
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(t => t.stop()); // libérer immédiatement
+    } catch (micErr) {
+      status.textContent = 'Microphone bloqué — cliquez sur 🔒 dans la barre d\'adresse → Autoriser le micro';
+      btn.disabled = false;
+      return;
+    }
+
+    status.textContent = 'Connexion en cours…';
 
     try {
       const vapi = await getVapi();
