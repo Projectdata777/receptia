@@ -202,6 +202,256 @@ app.get('/success', async (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
+// GET /onboarding — Formulaire de configuration client
+// ═══════════════════════════════════════════════════════════════════════════
+app.get('/onboarding', (req, res) => {
+  res.send(`<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Configuration ReceptIA — Votre réceptionniste IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .fade-in { animation: fadeIn .4s ease; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-50 min-h-screen py-12 px-4">
+
+  <!-- SUCCESS STATE -->
+  <div id="successState" class="hidden fade-in max-w-lg mx-auto bg-white rounded-3xl shadow-2xl p-10 text-center">
+    <div class="text-7xl mb-6">✅</div>
+    <h1 class="text-2xl font-extrabold text-gray-900 mb-3">Formulaire envoyé !</h1>
+    <p class="text-gray-500 mb-6">Nous allons configurer votre ReceptIA et vous recontacter sous 24h pour finaliser le paramétrage.</p>
+    <p class="text-gray-400 text-sm">Pensez aussi à réserver votre appel d'onboarding si ce n'est pas encore fait.</p>
+  </div>
+
+  <!-- FORM STATE -->
+  <div id="formState" class="max-w-2xl mx-auto">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-extrabold text-gray-900 mb-2">
+        Recept<span class="text-blue-600">IA</span> — Configuration
+      </h1>
+      <p class="text-gray-500">Remplissez ce formulaire pour que nous puissions configurer votre réceptionniste IA. <strong>10 minutes suffisent.</strong></p>
+    </div>
+
+    <form id="onboardingForm" class="bg-white rounded-3xl shadow-xl p-8 space-y-6">
+
+      <!-- Section 1 : Identité -->
+      <div class="border-b pb-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-4">👤 Vos informations</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Prénom *</label>
+            <input name="prenom" required placeholder="Marie" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Nom *</label>
+            <input name="nom" required placeholder="Dupont" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Email *</label>
+            <input name="email" type="email" required placeholder="marie@monsalon.fr" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Téléphone *</label>
+            <input name="telephone" required placeholder="06 12 34 56 78" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2 : Entreprise -->
+      <div class="border-b pb-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-4">🏢 Votre entreprise</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Nom de votre entreprise *</label>
+            <input name="entreprise" required placeholder="Salon Beauté Marie" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Secteur d'activité *</label>
+            <select name="secteur" required class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+              <option value="">-- Choisir --</option>
+              <option>Salon de coiffure / esthétique</option>
+              <option>Cabinet médical / dentaire</option>
+              <option>Cabinet d'avocat / comptable</option>
+              <option>Plombier / Électricien / Artisan</option>
+              <option>Restaurant / Hôtel</option>
+              <option>Agence immobilière</option>
+              <option>Garage automobile</option>
+              <option>Autre</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Numéro de téléphone pro actuel *</label>
+            <input name="tel_pro" required placeholder="01 23 45 67 89" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Adresse de votre établissement</label>
+            <input name="adresse" placeholder="12 rue de la Paix, 75001 Paris" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3 : Horaires -->
+      <div class="border-b pb-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-4">🕐 Vos horaires d'ouverture *</h2>
+        <textarea name="horaires" required rows="3" placeholder="Ex: Lundi-Vendredi 9h-19h, Samedi 9h-17h, fermé dimanche" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+      </div>
+
+      <!-- Section 4 : Script -->
+      <div class="border-b pb-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-2">📞 Message d'accueil *</h2>
+        <p class="text-gray-500 text-sm mb-3">Comment souhaitez-vous que votre réceptionniste IA réponde aux appels ? (elle s'adaptera, mais donnez-lui une base)</p>
+        <textarea name="message_accueil" required rows="3" placeholder='Ex: "Bonjour, vous avez bien joint le Salon Beauté Marie, je suis votre assistante Sofia. Comment puis-je vous aider ?"' class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+      </div>
+
+      <!-- Section 5 : Types d'appels -->
+      <div class="border-b pb-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-2">📋 Principaux types d'appels que vous recevez *</h2>
+        <p class="text-gray-500 text-sm mb-3">Cochez tout ce qui s'applique :</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          ${['Prises de rendez-vous', 'Demandes de prix / devis', 'Renseignements horaires', 'Urgences / SAV', 'Demandes de rappel', 'Commandes', 'Réclamations', 'Partenaires / fournisseurs', 'Autre'].map(v => `
+          <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+            <input type="checkbox" name="types_appels" value="${v}" class="rounded text-blue-600"/>
+            ${v}
+          </label>`).join('')}
+        </div>
+      </div>
+
+      <!-- Section 6 : Instructions spéciales -->
+      <div class="border-b pb-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-2">⚙️ Instructions particulières</h2>
+        <p class="text-gray-500 text-sm mb-3">Y a-t-il des choses spécifiques à savoir ? (tarifs, services, adresse, procédures urgence...)</p>
+        <textarea name="instructions" rows="4" placeholder="Ex: Pour les urgences plomberie, prendre le nom, le problème et l'adresse et me transmettre le message. Tarif d'intervention = 90€/h. Ne pas promettre de disponibilité le jour même..." class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+      </div>
+
+      <!-- Section 7 : Email de réception des messages -->
+      <div>
+        <h2 class="text-lg font-bold text-gray-900 mb-2">📨 Email de réception des messages vocaux</h2>
+        <p class="text-gray-500 text-sm mb-3">Où souhaitez-vous recevoir les résumés des appels et messages laissés ?</p>
+        <input name="email_messages" type="email" placeholder="marie@monsalon.fr (laisser vide = même que ci-dessus)" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+      </div>
+
+      <!-- Error -->
+      <div id="formError" class="hidden bg-red-50 text-red-700 rounded-xl p-4 text-sm"></div>
+
+      <!-- Submit -->
+      <button type="submit" id="submitBtn"
+              class="w-full py-4 bg-blue-600 text-white font-bold text-lg rounded-2xl hover:bg-blue-700 active:scale-95 transition-all">
+        Envoyer ma configuration →
+      </button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('onboardingForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      const errDiv = document.getElementById('formError');
+      btn.disabled = true;
+      btn.textContent = 'Envoi en cours...';
+      errDiv.classList.add('hidden');
+
+      const fd = new FormData(e.target);
+      const data = {};
+      for (const [k, v] of fd.entries()) {
+        if (data[k]) {
+          data[k] = Array.isArray(data[k]) ? [...data[k], v] : [data[k], v];
+        } else {
+          data[k] = v;
+        }
+      }
+
+      try {
+        const res = await fetch('/onboarding', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error(await res.text());
+        document.getElementById('formState').classList.add('hidden');
+        document.getElementById('successState').classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        errDiv.textContent = 'Erreur lors de l\\'envoi. Veuillez réessayer ou nous contacter.';
+        errDiv.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Envoyer ma configuration →';
+      }
+    });
+  </script>
+</body>
+</html>`);
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// POST /onboarding — Réception du formulaire → email au propriétaire
+// ═══════════════════════════════════════════════════════════════════════════
+app.post('/onboarding', async (req, res) => {
+  const d = req.body;
+
+  const rows = [
+    ['Prénom', d.prenom],
+    ['Nom', d.nom],
+    ['Email client', d.email],
+    ['Téléphone', d.telephone],
+    ['Entreprise', d.entreprise],
+    ['Secteur', d.secteur],
+    ['Téléphone pro', d.tel_pro],
+    ['Adresse', d.adresse || '—'],
+    ['Horaires', d.horaires],
+    ['Message d\'accueil', d.message_accueil],
+    ['Types d\'appels', Array.isArray(d.types_appels) ? d.types_appels.join(', ') : d.types_appels || '—'],
+    ['Instructions spéciales', d.instructions || '—'],
+    ['Email messages', d.email_messages || d.email],
+  ];
+
+  const tableRows = rows.map(([label, val]) => `
+    <tr>
+      <td style="padding:10px 14px;font-weight:600;color:#374151;background:#F9FAFB;border-bottom:1px solid #E5E7EB;width:38%;vertical-align:top;">${label}</td>
+      <td style="padding:10px 14px;color:#111827;border-bottom:1px solid #E5E7EB;white-space:pre-wrap;">${val || '—'}</td>
+    </tr>`).join('');
+
+  const html = `<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"/></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#F3F4F6;padding:32px 16px;">
+  <div style="max-width:640px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+    <div style="background:linear-gradient(135deg,#1e3a8a,#2563EB);padding:32px 36px;">
+      <h1 style="margin:0;color:#fff;font-size:22px;">🎯 Nouveau formulaire d'onboarding ReceptIA</h1>
+      <p style="margin:8px 0 0;color:#BFDBFE;font-size:14px;">Reçu le ${new Date().toLocaleString('fr-FR')}</p>
+    </div>
+    <div style="padding:24px 36px;">
+      <p style="color:#6B7280;font-size:14px;margin:0 0 20px;">Un client vient de soumettre son formulaire de configuration. Voici ses informations :</p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E5E7EB;border-radius:12px;overflow:hidden;border-collapse:collapse;">
+        ${tableRows}
+      </table>
+      <div style="margin-top:24px;padding:16px;background:#EFF6FF;border-radius:12px;">
+        <p style="margin:0;color:#1E40AF;font-size:14px;font-weight:600;">📌 Prochaine étape</p>
+        <p style="margin:6px 0 0;color:#3B82F6;font-size:14px;">Contacter <strong>${d.email}</strong> pour planifier la session de configuration et mettre en place le script Vapi.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
+
+  try {
+    await getResend().emails.send({
+      from: `ReceptIA <${process.env.FROM_EMAIL || 'onboarding@resend.dev'}>`,
+      to:   [process.env.OWNER_EMAIL || 'ferykdp2004@gmail.com'],
+      subject: `🎯 Nouveau client onboarding — ${d.entreprise || d.email}`,
+      html,
+    });
+    res.status(200).json({ ok: true });
+  } catch (err) {
+    console.error('[Onboarding] Erreur email :', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
 // GET / (fallback — sert index.html)
 // ═══════════════════════════════════════════════════════════════════════════
 app.get('/', (req, res) => {
