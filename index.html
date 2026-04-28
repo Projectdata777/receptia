@@ -641,9 +641,10 @@
     });
 
     vapiInstance.on('error', (e) => {
-      console.error('Vapi error:', e);
+      console.error('Vapi error:', JSON.stringify(e));
       callActive = false;
-      document.getElementById('vapi-status').textContent = 'Erreur de connexion. Vérifiez votre micro.';
+      const msg = e?.error?.message || e?.message || e?.type || JSON.stringify(e).substring(0, 80);
+      document.getElementById('vapi-status').textContent = 'Erreur: ' + msg;
       document.getElementById('vapi-btn-container').classList.remove('bg-red-500');
       document.getElementById('vapi-btn-container').classList.add('bg-primary');
       document.getElementById('vapi-start-btn').textContent = '📞';
@@ -670,36 +671,39 @@
       vapiInstance = vapi;
 
       btn.disabled = false;
-      await vapiInstance.start(VAPI_ASSISTANT_ID, {
+      await vapiInstance.start({
+        name: "Sofia",
         firstMessage: "Bonjour ! Je suis Sofia, votre réceptionniste ReceptIA. Je réponds aux appels de votre entreprise 24h sur 24, 7 jours sur 7. Comment puis-je vous aider aujourd'hui ?",
+        transcriber: {
+          provider: "deepgram",
+          model: "nova-2",
+          language: "fr"
+        },
         model: {
+          provider: "openai",
+          model: "gpt-4o-mini",
           messages: [
             {
               role: "system",
               content: `Tu es Sofia, une réceptionniste IA ultra-professionnelle créée par ReceptIA. Tu fais la démonstration de ce que ReceptIA peut faire pour les PME françaises.
 
-CONTEXTE :
-ReceptIA est un service de réceptionniste IA qui répond aux appels entrants des entreprises françaises 24h/24, 7j/7, sans secrétaire humaine. Les plans vont de 97€/mois (Starter) à 297€/mois (Pro) et 697€/mois (Agency).
-
-TON RÔLE DANS CETTE DÉMO :
-Tu simules ce que vivrait un client qui appelle une entreprise équipée de ReceptIA. Tu répondas comme si tu étais la vraie réceptionniste de leur entreprise.
+CONTEXTE : ReceptIA répond aux appels entrants 24h/24, 7j/7, sans secrétaire humaine. Formules : 97€/mois (Starter), 297€/mois (Pro), 697€/mois (Agency).
 
 COMPORTEMENT :
-- Sois chaleureuse, professionnelle, naturelle — jamais robotique
-- Parle en français impeccable, avec un ton humain et bienveillant
-- Réponds aux questions sur les horaires, services, urgences avec des exemples génériques
-- Si on te demande comment tu fonctionnes, explique brièvement : "Je suis une IA formée pour répondre aux appels de votre entreprise. Je peux qualifier les prospects, prendre des messages, transférer les urgences et répondre aux questions fréquentes."
-- Si on te demande le tarif de ReceptIA : "Nos formules commencent à 97€/mois pour la version Starter, avec une configuration complète en 24h."
-- Si on veut parler à un humain : "Bien sûr, je transfère votre appel à l'équipe. Un instant s'il vous plaît." puis indique que dans la vraie vie, le transfert serait effectué automatiquement.
-- Limite tes réponses à 2-3 phrases maximum — tu es une réceptionniste, pas un assistant IA.
-- Après 2-3 échanges, propose naturellement : "Souhaitez-vous en savoir plus sur la façon dont ReceptIA pourrait être configurée pour votre entreprise ?"
+- Chaleureuse, professionnelle, naturelle — jamais robotique
+- Français impeccable, ton humain et bienveillant
+- Réponses courtes : 2-3 phrases maximum
+- Si on demande le tarif : "Nos formules commencent à 97€/mois"
+- Si on veut parler à un humain : "Je transfère votre appel, un instant"
+- Après 2-3 échanges, propose : "Souhaitez-vous voir comment ReceptIA pourrait être configurée pour votre entreprise ?"
 
-RÈGLES ABSOLUES :
-- Ne dis JAMAIS que tu es un chatbot ou un LLM
-- Ne mentionne jamais OpenAI, GPT, Claude ou d'autres IA
-- Reste dans le personnage de réceptionniste du début à la fin`
+RÈGLES : Ne mentionne jamais OpenAI, GPT, Claude, ni que tu es une IA. Tu es une réceptionniste.`
             }
           ]
+        },
+        voice: {
+          provider: "11labs",
+          voiceId: "21m00Tcm4TlvDq8ikWAM"
         }
       });
 
