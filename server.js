@@ -760,8 +760,16 @@ app.post('/retell/webhook', express.json(), async (req, res) => {
     const isLocation   = /louer|location|trouver un logement|cherche un appart|cherche une maison/i.test(fullText);
     const hasRDV       = /rendez-vous|rdv|convenu|confirm|planifi|fix[eé] le|prévu le/i.test(fullText);
 
-    const dateMatch = (summary + ' ' + transcript).match(/\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)\b.*?\b(\d{1,2}h\d{0,2}|\d{1,2}:\d{2})/i);
-    const rdvDateTime = dateMatch ? `${dateMatch[1]} à ${dateMatch[2]}` : null;
+    // Extraction date/heure RDV — formats : "lundi 12 mai à 10h30", "le 15/06 à 14h", "mardi matin à 9h", etc.
+    const rawText = summary + ' ' + transcript;
+    const dateRe = /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)(?:\s+\d{1,2}(?:\s+(?:janvier|f[eé]vrier|mars|avril|mai|juin|juillet|ao[uû]t|septembre|octobre|novembre|d[eé]cembre))?)?|\b\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?|\b\d{1,2}\s+(?:janvier|f[eé]vrier|mars|avril|mai|juin|juillet|ao[uû]t|septembre|octobre|novembre|d[eé]cembre)/i;
+    const timeRe  = /\b(\d{1,2}h\d{0,2}|\d{1,2}:\d{2})\b/i;
+    const datePart = rawText.match(dateRe)?.[0] || null;
+    const timePart = rawText.match(timeRe)?.[1] || null;
+    const rdvDateTime = datePart && timePart ? `${datePart} à ${timePart}`
+                      : datePart             ? datePart
+                      : timePart             ? `à ${timePart}`
+                      : null;
 
     // ── Score ──────────────────────────────────────────────────────────────
     let score = 'FROID';
@@ -819,21 +827,24 @@ app.post('/retell/webhook', express.json(), async (req, res) => {
     // (isVisite, isEstimation, isVente, isLocation, hasRDV, rdvDateTime déjà définis plus haut)
     if (fromNumber && fromNumber !== 'unknown') {
       let smsBody;
+      const rdvStr = rdvDateTime ? ` le ${rdvDateTime}` : '';
+      const rdvFallback = ' — un conseiller vous confirmera l\'horaire très vite';
+
       if (hasRDV && isVisite) {
-        smsBody = `Bonjour, votre RDV de visite avec l'Agence des Jardins est bien enregistré${rdvDateTime ? ` : ${rdvDateTime}` : ''}. Notre conseiller sera présent. Pour toute question : 01 89 48 09 17`;
+        smsBody = `Agence des Jardins — Votre RDV de visite est confirmé${rdvStr || rdvFallback}. On vous attend ! 01 89 48 09 17`;
       } else if (hasRDV && isEstimation) {
-        smsBody = `Bonjour, votre RDV d'estimation gratuite avec l'Agence des Jardins est confirmé${rdvDateTime ? ` : ${rdvDateTime}` : ''}. Nos experts se déplacent chez vous. Contact : 01 89 48 09 17`;
-      } else if (hasRDV && (isVente || isLocation)) {
-        const typeLabel = isVente ? 'de mise en vente' : 'pour votre projet de location';
-        smsBody = `Bonjour, votre RDV ${typeLabel} avec l'Agence des Jardins est confirmé${rdvDateTime ? ` : ${rdvDateTime}` : ''}. À très bientôt ! 01 89 48 09 17`;
+        smsBody = `Agence des Jardins — Votre RDV d'estimation gratuite est confirmé${rdvStr || rdvFallback}. Nos experts se déplacent chez vous. 01 89 48 09 17`;
+      } else if (hasRDV) {
+        const typeLabel = isVente ? 'de mise en vente' : isLocation ? 'pour votre location' : '';
+        smsBody = `Agence des Jardins — Votre RDV ${typeLabel} est confirmé${rdvStr || rdvFallback}. À très bientôt ! 01 89 48 09 17`;
       } else if (isEstimation) {
-        smsBody = `Bonjour, merci pour votre demande d'estimation. Un expert de l'Agence des Jardins vous contacte très prochainement pour fixer un RDV. 📞 01 89 48 09 17`;
+        smsBody = `Agence des Jardins — Merci pour votre demande d'estimation. Un expert vous rappelle très vite pour fixer la date. 01 89 48 09 17`;
       } else if (isVisite) {
-        smsBody = `Bonjour, merci pour votre intérêt. Un conseiller de l'Agence des Jardins vous rappelle pour organiser votre visite. 📞 01 89 48 09 17`;
+        smsBody = `Agence des Jardins — Merci pour votre intérêt. Un conseiller vous rappelle pour organiser la visite. 01 89 48 09 17`;
       } else if (isVente) {
-        smsBody = `Bonjour, merci pour votre contact. Un expert de l'Agence des Jardins vous rappelle rapidement pour étudier votre projet de vente. 📞 01 89 48 09 17`;
+        smsBody = `Agence des Jardins — Merci pour votre contact. Un expert vous rappelle rapidement pour votre projet de vente. 01 89 48 09 17`;
       } else {
-        smsBody = `Bonjour, merci pour votre appel à l'Agence des Jardins. Un conseiller vous recontacte très prochainement. 📞 01 89 48 09 17`;
+        smsBody = `Agence des Jardins — Merci pour votre appel. Un conseiller vous recontacte très prochainement. 01 89 48 09 17`;
       }
 
       await fetch('https://api.brevo.com/v3/transactionalSMS/sms', {
