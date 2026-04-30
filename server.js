@@ -511,6 +511,15 @@ app.post('/onboarding', rateLimit(60_000, 5), async (req, res) => {
 // ═══════════════════════════════════════════════════════════════════════════
 app.get('/health', (req, res) => res.json({ ok: true, ts: Date.now() }));
 
+// ─── Agence des Jardins — site statique ────────────────────────────────────
+app.get('/agence-des-jardins', (req, res) => {
+  res.sendFile(path.join(__dirname, 'agence-des-jardins.html'));
+});
+app.get('/simulateur-widget.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript');
+  res.sendFile(path.join(__dirname, 'simulateur-widget.js'));
+});
+
 // GET / (fallback — sert index.html)
 // ═══════════════════════════════════════════════════════════════════════════
 app.get('/', (req, res) => {

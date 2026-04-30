@@ -1,0 +1,3937 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agence des Jardins — Immobilier à Vernon, Normandie</title>
+<meta name="description" content="Votre agence immobilière à Vernon (27200). Achat, vente, location et estimation gratuite de biens dans la vallée de la Seine.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   RESET & VARIABLES
+   ============================================================ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --noir: #0A0A0A;
+  --noir-soft: #111111;
+  --noir-card: #161616;
+  --noir-border: #222222;
+  --blanc: #FFFFFF;
+  --blanc-soft: #F8F6F2;
+  --or: #C9A028;
+  --or-light: #EDD060;
+  --or-dark: #7A5C0A;
+  --champagne: #F5E6C8;
+  --gris: #888888;
+  --gris-light: #CCCCCC;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, sans-serif;
+  --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --shadow-or: 0 0 30px rgba(201,160,40,0.15), 0 0 60px rgba(201,160,40,0.08);
+  --shadow-card: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+button, input, select, textarea {
+  font-family: var(--font-sans);
+}
+
+body {
+  background: var(--noir);
+  color: var(--blanc);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 500; line-height: 1.2; }
+
+.gold { color: var(--or); }
+.serif { font-family: var(--font-serif); }
+
+/* ============================================================
+   SHIMMER ANIMATION — GOLD LEFT TO RIGHT
+   ============================================================ */
+
+/* Sweep de gauche à droite : or sombre → or vif → blanc éclatant → or vif → or sombre */
+@keyframes shimmer {
+  0%   { background-position: -300% center; }
+  100% { background-position: 300% center; }
+}
+
+/* Shimmer continu pour les boutons (fond doré) */
+@keyframes shimmer-btn {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Ligne dorée qui scintille de gauche à droite */
+@keyframes shimmer-line {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(201,160,40,0.35), 0 0 40px rgba(201,160,40,0.12); }
+  50%       { box-shadow: 0 0 50px rgba(201,160,40,0.7),  0 0 90px rgba(201,160,40,0.25); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.5); }
+  50%       { transform: scaleY(1.5); }
+}
+
+/* -------- SHIMMER TEXTE (titres h1/h2 mis en avant) -------- */
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    #4A3006 0%,
+    #7A5C0A 12%,
+    #8B6514 22%,
+    #C9A028 35%,
+    #EDD060 45%,
+    #FFF8E0 50%,
+    #EDD060 55%,
+    #C9A028 65%,
+    #8B6514 78%,
+    #7A5C0A 88%,
+    #4A3006 100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 8s linear infinite;
+  display: inline-block;
+}
+
+/* -------- SHIMMER OR GÉNÉRAL (sur les éléments or non-texte) -------- */
+.shimmer-or {
+  background: linear-gradient(
+    90deg,
+    #5C4008 0%,
+    #8B6514 20%,
+    #C9A028 38%,
+    #EDD060 47%,
+    #FFF8E0 50%,
+    #EDD060 53%,
+    #C9A028 62%,
+    #8B6514 80%,
+    #5C4008 100%
+  );
+  background-size: 200% auto;
+  animation: shimmer-line 6s linear infinite;
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 0 60px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease;
+  background: rgba(6,5,3,0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(201,160,40,0.1);
+}
+nav.scrolled {
+  background: rgba(5,4,2,0.97);
+  border-bottom-color: rgba(201,160,40,0.2);
+}
+.nav-logo {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nav-logo-mark { flex-shrink: 0; }
+.nav-logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  line-height: 1;
+}
+.nav-logo-sub {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+}
+.nav-logo-name {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: linear-gradient(90deg,#4A3006 0%,#8B6514 18%,#C9A028 33%,#EDD060 46%,#FFF8E0 50%,#EDD060 54%,#C9A028 67%,#8B6514 82%,#4A3006 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 8s linear infinite;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--gris-light);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: var(--transition);
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--or);
+  transition: var(--transition);
+}
+.nav-links a:hover { color: var(--blanc); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta {
+  background: transparent !important;
+  border: 1px solid var(--or) !important;
+  color: var(--or) !important;
+  padding: 10px 24px !important;
+  border-radius: 0 !important;
+  letter-spacing: 2px !important;
+  font-size: 11px !important;
+  transition: background 0.4s ease, color 0.4s ease, box-shadow 0.4s ease !important;
+  -webkit-text-fill-color: var(--or) !important;
+}
+.nav-cta:hover {
+  background: var(--or) !important;
+  color: var(--noir) !important;
+  -webkit-text-fill-color: var(--noir) !important;
+  box-shadow: 0 0 20px rgba(201,160,40,0.35) !important;
+}
+.nav-cta::after { display: none !important; }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 5px;
+}
+.hamburger span {
+  display: block;
+  width: 24px; height: 1px;
+  background: var(--blanc);
+  transition: var(--transition);
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+#hero {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-color: #1a1a0a; /* fallback si image bloquée */
+  background-image:
+    linear-gradient(135deg, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.28) 50%, rgba(10,10,10,0.72) 100%),
+    url('hero-vernon.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(10,10,10,0.3) 0%, transparent 40%, rgba(10,10,10,0.8) 100%);
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+  padding: 0 30px 130px;
+  animation: fadeInUp 1s ease-out;
+}
+.hero-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.hero-eyebrow .ey-text {
+  background: linear-gradient(90deg, #5C4008 0%, #8B6514 18%, #C9A028 35%, #EDD060 46%, #FFF8E0 50%, #EDD060 54%, #C9A028 65%, #8B6514 82%, #5C4008 100%);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 7s linear infinite;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: '';
+  width: 40px; height: 1px;
+  background: linear-gradient(90deg, transparent, #8B6514, #EDD060, #FFF8E0, #EDD060, #8B6514, transparent);
+  background-size: 200% auto;
+  animation: shimmer-line 5s linear infinite;
+  flex-shrink: 0;
+}
+.hero-title {
+  font-size: clamp(42px, 6vw, 80px);
+  font-weight: 500;
+  line-height: 1.1;
+  margin-bottom: 28px;
+  letter-spacing: -1px;
+}
+.hero-subtitle {
+  font-size: 17px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.75);
+  max-width: 560px;
+  margin: 0 auto 50px;
+  line-height: 1.7;
+}
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(
+    90deg,
+    #5C4008 0%,
+    #8B6514 18%,
+    #C9A028 35%,
+    #EDD060 46%,
+    #FFF8E0 50%,
+    #EDD060 54%,
+    #C9A028 65%,
+    #8B6514 82%,
+    #5C4008 100%
+  );
+  background-size: 250% auto;
+  animation: shimmer-btn 7s linear infinite;
+  color: var(--noir);
+  padding: 16px 36px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: box-shadow 0.4s ease, transform 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 20%, rgba(255,255,255,0.35) 50%, transparent 80%);
+  transform: translateX(-150%);
+  transition: transform 0.55s ease;
+}
+.btn-primary:hover::before { transform: translateX(150%); }
+.btn-primary:hover {
+  box-shadow: 0 8px 35px rgba(201,160,40,0.55), 0 0 60px rgba(201,160,40,0.2);
+  transform: translateY(-2px);
+}
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  color: var(--blanc);
+  padding: 15px 36px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-secondary:hover {
+  border-color: var(--or);
+  color: var(--or);
+  transform: translateY(-2px);
+}
+.hero-scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--gris);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  animation: float 3s ease-in-out infinite;
+}
+.hero-scroll-line {
+  width: 1px; height: 50px;
+  background: linear-gradient(to bottom, #FFF8E0, #C9A028, transparent);
+  box-shadow: 0 0 6px rgba(201,160,40,0.5);
+}
+
+.star {
+  background: linear-gradient(90deg, #5C4008 0%, #8B6514 18%, #C9A028 35%, #EDD060 46%, #FFF8E0 50%, #EDD060 54%, #C9A028 65%, #8B6514 82%, #5C4008 100%);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 7s linear infinite;
+  font-size: 14px;
+}
+.hero-badges {
+  position: absolute;
+  bottom: 28px;
+  left: 0; right: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 0 30px;
+}
+.hero-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(201,160,40,0.2);
+  padding: 10px 20px;
+  border-radius: 2px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.8);
+}
+.hero-badge svg { color: var(--or); flex-shrink: 0; }
+
+/* ============================================================
+   SECTION BASE
+   ============================================================ */
+section { position: relative; }
+section[id] { scroll-margin-top: 80px; }
+.section-inner { max-width: 1200px; margin: 0 auto; padding: 0 60px; }
+.section-header {
+  text-align: center;
+  margin-bottom: 70px;
+}
+.section-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  position: relative;
+}
+/* Le texte à l'intérieur reçoit le shimmer via un span */
+.section-eyebrow .ey-text {
+  background: linear-gradient(90deg, #5C4008 0%, #8B6514 18%, #C9A028 35%, #EDD060 46%, #FFF8E0 50%, #EDD060 54%, #C9A028 65%, #8B6514 82%, #5C4008 100%);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 7s linear infinite;
+}
+.section-eyebrow::before, .section-eyebrow::after {
+  content: '';
+  width: 30px; height: 1px;
+  background: linear-gradient(90deg, transparent, #8B6514, #EDD060, #FFF8E0, #EDD060, #8B6514, transparent);
+  background-size: 200% auto;
+  animation: shimmer-line 5s linear infinite;
+  flex-shrink: 0;
+}
+.section-title {
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 500;
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
+}
+.section-desc {
+  font-size: 16px;
+  color: var(--gris);
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ============================================================
+   AGENT IA SECTION
+   ============================================================ */
+#agent-ia {
+  padding: 120px 0;
+  background: linear-gradient(180deg, var(--noir) 0%, #0D0D0D 50%, var(--noir) 100%);
+  overflow: hidden;
+}
+.agent-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.agent-left .section-eyebrow { justify-content: flex-start; }
+.agent-left .section-eyebrow::before { display: none; }
+.agent-left .section-title { text-align: left; margin-bottom: 24px; }
+.agent-desc {
+  font-size: 16px;
+  color: var(--gris);
+  line-height: 1.8;
+  margin-bottom: 40px;
+  max-width: 460px;
+}
+.agent-features {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.agent-feature {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.8);
+}
+.agent-feature-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--or);
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(201,160,40,0.6);
+}
+.agent-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.agent-orb-container {
+  position: relative;
+  width: 380px;
+  height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.agent-orb-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(201,160,40,0.15);
+  animation: spin-slow linear infinite;
+}
+.agent-orb-ring:nth-child(1) { width: 100%; height: 100%; animation-duration: 20s; }
+.agent-orb-ring:nth-child(2) { width: 80%; height: 80%; animation-duration: 15s; animation-direction: reverse; border-color: rgba(201,160,40,0.1); }
+.agent-orb-ring:nth-child(3) { width: 60%; height: 60%; animation-duration: 10s; border-color: rgba(201,160,40,0.08); }
+.agent-orb-ring::after {
+  content: '';
+  position: absolute;
+  top: -3px; left: 50%;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--or);
+  transform: translateX(-50%);
+  box-shadow: 0 0 10px var(--or);
+}
+.agent-orb-center {
+  position: relative;
+  z-index: 2;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(201,160,40,0.2) 0%, rgba(201,160,40,0.05) 60%, transparent 100%);
+  border: 1px solid rgba(201,160,40,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  animation: pulse-glow 3s ease-in-out infinite;
+  transition: var(--transition);
+}
+.agent-orb-center:hover { transform: scale(1.05); }
+.agent-orb-icon {
+  width: 48px; height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.agent-orb-icon svg { width: 36px; height: 36px; color: var(--or); }
+.agent-orb-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+  background: linear-gradient(90deg, #5C4008 0%, #8B6514 18%, #C9A028 35%, #EDD060 46%, #FFF8E0 50%, #EDD060 54%, #C9A028 65%, #8B6514 82%, #5C4008 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 6s linear infinite;
+}
+.agent-wave-bars {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 20px;
+}
+.agent-wave-bars span {
+  display: block;
+  width: 3px;
+  background: var(--or);
+  border-radius: 2px;
+  opacity: 0.7;
+}
+.agent-wave-bars span:nth-child(1) { height: 8px; animation: wave 1.2s ease-in-out infinite 0s; }
+.agent-wave-bars span:nth-child(2) { height: 14px; animation: wave 1.2s ease-in-out infinite 0.1s; }
+.agent-wave-bars span:nth-child(3) { height: 20px; animation: wave 1.2s ease-in-out infinite 0.2s; }
+.agent-wave-bars span:nth-child(4) { height: 14px; animation: wave 1.2s ease-in-out infinite 0.3s; }
+.agent-wave-bars span:nth-child(5) { height: 8px; animation: wave 1.2s ease-in-out infinite 0.4s; }
+
+/* Voice call widget */
+.voice-cta-group { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+.voice-call-btn { position: relative; overflow: hidden; }
+.voice-call-btn.calling { background: #1a3a1a; border-color: #2ecc71; color: #2ecc71; animation: none; }
+.voice-call-btn.calling::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle, rgba(46,204,113,0.15) 0%, transparent 70%); animation: pulse-green 1.5s ease-in-out infinite; }
+@keyframes pulse-green { 0%,100%{opacity:0.4} 50%{opacity:1} }
+.voice-phone-link { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.voice-note { font-size: 11px; color: var(--gris); margin-top: 14px; letter-spacing: 0.5px; }
+.voice-status { display: flex; align-items: center; gap: 10px; justify-content: center; margin-top: 20px; font-size: 13px; color: var(--gris-light); }
+.voice-status-dot { width: 8px; height: 8px; border-radius: 50%; background: #2ecc71; animation: pulse-green 1s ease-in-out infinite; flex-shrink: 0; }
+.agent-orb-center.calling { border-color: rgba(46,204,113,0.6); box-shadow: 0 0 40px rgba(46,204,113,0.25); }
+.agent-orb-center.calling .agent-orb-icon svg { color: #2ecc71; }
+
+/* ============================================================
+   LISTINGS
+   ============================================================ */
+#biens {
+  padding: 120px 0;
+  background: var(--noir-soft);
+}
+.listings-filter {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 10px 24px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: transparent;
+  color: var(--gris);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-sans);
+}
+.filter-btn.active, .filter-btn:hover {
+  border-color: var(--or);
+  color: var(--or);
+  background: rgba(201,160,40,0.05);
+}
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.listing-card {
+  background: var(--noir-card);
+  border: 1px solid var(--noir-border);
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+.listing-card:hover {
+  border-color: rgba(201,160,40,0.3);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card), var(--shadow-or);
+}
+.listing-card.featured { grid-column: span 2; }
+.listing-img {
+  position: relative;
+  overflow: hidden;
+  height: 280px;
+}
+.listing-card.featured .listing-img { height: 380px; }
+.listing-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.listing-card:hover .listing-img img { transform: scale(1.08); }
+.listing-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,10,10,0.7) 0%, transparent 60%);
+}
+.listing-tag {
+  position: absolute;
+  top: 20px; left: 20px;
+  padding: 6px 14px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 1px;
+}
+.tag-vente {
+  background: linear-gradient(90deg, #5C4008 0%, #8B6514 18%, #C9A028 35%, #EDD060 46%, #FFF8E0 50%, #EDD060 54%, #C9A028 65%, #8B6514 82%, #5C4008 100%);
+  background-size: 250% auto;
+  animation: shimmer-btn 6s linear infinite;
+  color: var(--noir);
+  font-weight: 700;
+}
+.tag-location {
+  background: rgba(255,255,255,0.15);
+  color: var(--blanc);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.tag-exclusif {
+  background: var(--noir);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  overflow: hidden;
+}
+.tag-exclusif::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(90deg, #5C4008, #8B6514, #C9A028, #EDD060, #FFF8E0, #EDD060, #C9A028, #8B6514, #5C4008);
+  background-size: 250% auto;
+  animation: shimmer-btn 6s linear infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.tag-exclusif-text {
+  background: linear-gradient(90deg, #5C4008 0%, #8B6514 18%, #C9A028 35%, #EDD060 46%, #FFF8E0 50%, #EDD060 54%, #C9A028 65%, #8B6514 82%, #5C4008 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 6s linear infinite;
+}
+.listing-quick-cta {
+  position: absolute;
+  bottom: 20px; right: 20px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: var(--transition);
+}
+.listing-card:hover .listing-quick-cta {
+  opacity: 1;
+  transform: translateY(0);
+}
+.listing-quick-cta a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--or);
+  color: var(--noir);
+  padding: 10px 18px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.listing-body { padding: 28px; }
+.listing-location {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 10px;
+  display: block;
+}
+.listing-location .loc-text {
+  background: linear-gradient(90deg, #5C4008 0%, #8B6514 18%, #C9A028 35%, #EDD060 46%, #FFF8E0 50%, #EDD060 54%, #C9A028 65%, #8B6514 82%, #5C4008 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 7s linear infinite;
+}
+.listing-title {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+.listing-specs {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.listing-spec {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--gris);
+}
+.listing-spec svg { color: var(--or); opacity: 0.8; }
+.listing-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid var(--noir-border);
+}
+.listing-price {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--blanc);
+}
+.listing-price span {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--gris);
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+.listings-cta-row {
+  text-align: center;
+  margin-top: 60px;
+}
+
+/* ============================================================
+   SERVICES
+   ============================================================ */
+#services {
+  padding: 120px 0;
+  background: var(--noir);
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+}
+.service-card {
+  padding: 50px 36px;
+  background: var(--noir-card);
+  border: 1px solid var(--noir-border);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.service-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background: linear-gradient(90deg, #5C4008 0%, #8B6514 18%, #C9A028 35%, #EDD060 46%, #FFF8E0 50%, #EDD060 54%, #C9A028 65%, #8B6514 82%, #5C4008 100%);
+  background-size: 200% auto;
+  animation: shimmer-line 5s linear infinite;
+  transition: width 0.5s ease;
+}
+.service-card:hover::before { width: 100%; }
+.service-card:hover {
+  background: #1A1A1A;
+  border-color: rgba(201,160,40,0.2);
+}
+.service-icon {
+  width: 56px; height: 56px;
+  border: 1px solid rgba(201,160,40,0.3);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+  transition: var(--transition);
+}
+.service-card:hover .service-icon {
+  background: rgba(201,160,40,0.08);
+  border-color: var(--or);
+  box-shadow: 0 0 20px rgba(201,160,40,0.15);
+}
+.service-icon svg { color: var(--or); }
+.service-title {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+.service-desc {
+  font-size: 14px;
+  color: var(--gris);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.service-link {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--or);
+  transition: gap 0.4s ease, color 0.4s ease;
+}
+.service-link .sl-text {
+  background: linear-gradient(90deg, #5C4008 0%, #8B6514 18%, #C9A028 35%, #EDD060 46%, #FFF8E0 50%, #EDD060 54%, #C9A028 65%, #8B6514 82%, #5C4008 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 7s linear infinite;
+}
+.service-link:hover { gap: 14px; }
+
+/* ============================================================
+   CHIFFRES
+   ============================================================ */
+#chiffres {
+  padding: 100px 0;
+  background: linear-gradient(135deg, #0D0D0D 0%, var(--noir) 100%);
+  border-top: 1px solid var(--noir-border);
+  border-bottom: 1px solid var(--noir-border);
+}
+.chiffres-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--noir-border);
+}
+.chiffre-item {
+  background: var(--noir);
+  padding: 50px 40px;
+  text-align: center;
+  position: relative;
+  transition: var(--transition);
+}
+.chiffre-item:hover { background: #141414; }
+.chiffre-number {
+  font-family: var(--font-serif);
+  font-size: 56px;
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 12px;
+  background: linear-gradient(90deg, #4A3006 0%, #8B6514 18%, #C9A028 35%, #EDD060 46%, #FFF8E0 50%, #EDD060 54%, #C9A028 65%, #8B6514 82%, #4A3006 100%);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 8s linear infinite;
+}
+.chiffre-label {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gris);
+}
+
+/* ============================================================
+   ESTIMATION FORM
+   ============================================================ */
+#estimation {
+  padding: 120px 0;
+  background: var(--noir-soft);
+}
+.estimation-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.estimation-left .section-title { text-align: left; }
+.estimation-left .section-eyebrow { justify-content: flex-start; }
+.estimation-left .section-eyebrow::before { display: none; }
+.estimation-promise {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 40px;
+}
+.estimation-promise-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.promise-icon {
+  width: 40px; height: 40px;
+  border: 1px solid rgba(201,160,40,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.promise-icon svg { color: var(--or); }
+.promise-text h4 {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.promise-text p { font-size: 13px; color: var(--gris); }
+
+.form-card {
+  background: var(--noir-card);
+  border: 1px solid var(--noir-border);
+  padding: 48px;
+}
+.form-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.form-subtitle {
+  font-size: 13px;
+  color: var(--gris);
+  margin-bottom: 36px;
+}
+.form-group { margin-bottom: 20px; }
+.form-label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gris);
+  margin-bottom: 8px;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--noir-border);
+  color: var(--blanc);
+  padding: 14px 18px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 300;
+  transition: var(--transition);
+  outline: none;
+  -webkit-appearance: none;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--or);
+  background: rgba(201,160,40,0.04);
+}
+.form-select option { background: var(--noir); }
+.form-textarea { resize: vertical; min-height: 100px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-submit { width: 100%; margin-top: 8px; border-radius: 0; }
+
+/* ============================================================
+   TÉMOIGNAGES
+   ============================================================ */
+#temoignages {
+  padding: 120px 0;
+  background: var(--noir);
+}
+.temoignages-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.temoignage-card {
+  background: var(--noir-card);
+  border: 1px solid var(--noir-border);
+  padding: 40px;
+  transition: var(--transition);
+  position: relative;
+}
+.temoignage-card:hover {
+  border-color: rgba(201,160,40,0.2);
+  transform: translateY(-4px);
+}
+.temoignage-quote-mark {
+  font-family: var(--font-serif);
+  font-size: 80px;
+  line-height: 0.8;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #5C4008 0%, #8B6514 18%, #C9A028 35%, #EDD060 46%, #FFF8E0 50%, #EDD060 54%, #C9A028 65%, #8B6514 82%, #5C4008 100%);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 8s linear infinite;
+  opacity: 0.35;
+  display: block;
+}
+.temoignage-stars {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+}
+.star { color: var(--or); font-size: 14px; }
+.temoignage-text {
+  font-size: 15px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.8;
+  margin-bottom: 28px;
+  font-style: italic;
+  font-family: var(--font-serif);
+}
+.temoignage-author {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 24px;
+  border-top: 1px solid var(--noir-border);
+}
+.author-avatar {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--or) 0%, var(--or-dark) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  color: var(--noir);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.author-name { font-size: 14px; font-weight: 500; }
+.author-detail { font-size: 12px; color: var(--gris); margin-top: 2px; }
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+#contact {
+  padding: 120px 0;
+  background: var(--noir-soft);
+}
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 80px;
+  align-items: start;
+}
+.contact-info-items {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-top: 40px;
+}
+.contact-info-item {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+.contact-info-icon {
+  width: 46px; height: 46px;
+  border: 1px solid rgba(201,160,40,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.contact-info-icon svg { color: var(--or); }
+.contact-info-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 4px;
+  display: block;
+}
+.contact-info-label .lbl-text {
+  background: linear-gradient(90deg, #5C4008 0%, #8B6514 18%, #C9A028 35%, #EDD060 46%, #FFF8E0 50%, #EDD060 54%, #C9A028 65%, #8B6514 82%, #5C4008 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 7s linear infinite;
+}
+.contact-info-value { font-size: 15px; font-weight: 400; }
+.contact-info-sub { font-size: 12px; color: var(--gris); margin-top: 2px; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  background: var(--noir);
+  border-top: 1px solid var(--noir-border);
+  padding: 70px 0 30px;
+}
+.footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 60px; }
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 60px;
+  margin-bottom: 60px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid var(--noir-border);
+}
+.footer-brand-name {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.footer-brand-tagline {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #5C4008 0%, #8B6514 18%, #C9A028 35%, #EDD060 46%, #FFF8E0 50%, #EDD060 54%, #C9A028 65%, #8B6514 82%, #5C4008 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 7s linear infinite;
+  display: inline-block;
+}
+.footer-brand-desc {
+  font-size: 13px;
+  color: var(--gris);
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+.footer-social {
+  display: flex;
+  gap: 12px;
+}
+.footer-social a {
+  width: 38px; height: 38px;
+  border: 1px solid var(--noir-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gris);
+  text-decoration: none;
+  transition: var(--transition);
+}
+.footer-social a:hover {
+  border-color: var(--or);
+  color: var(--or);
+}
+.footer-col-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--blanc);
+  margin-bottom: 24px;
+}
+.footer-col-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+}
+.footer-col-links a {
+  font-size: 13px;
+  color: var(--gris);
+  text-decoration: none;
+  transition: var(--transition);
+}
+.footer-col-links a:hover { color: var(--or); padding-left: 6px; }
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-copy {
+  font-size: 12px;
+  color: var(--gris);
+}
+.footer-legal {
+  display: flex;
+  gap: 24px;
+}
+.footer-legal a {
+  font-size: 12px;
+  color: var(--gris);
+  text-decoration: none;
+  transition: var(--transition);
+}
+.footer-legal a:hover { color: var(--or); }
+
+/* ============================================================
+   STICKY CTA
+   ============================================================ */
+.sticky-cta {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+.sticky-cta-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(90deg, #5C4008 0%, #8B6514 18%, #C9A028 35%, #EDD060 46%, #FFF8E0 50%, #EDD060 54%, #C9A028 65%, #8B6514 82%, #5C4008 100%);
+  background-size: 250% auto;
+  animation: shimmer-btn 2.5s linear infinite, pulse-glow 3s ease-in-out infinite;
+  color: var(--noir);
+  padding: 14px 24px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  font-family: var(--font-sans);
+}
+.sticky-cta-main:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(201,160,40,0.6), 0 0 80px rgba(201,160,40,0.2);
+}
+.sticky-phone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--noir-card);
+  border: 1px solid rgba(201,160,40,0.2);
+  color: var(--blanc);
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 400;
+  text-decoration: none;
+  transition: var(--transition);
+}
+.sticky-phone:hover { border-color: var(--or); color: var(--or); }
+.sticky-phone svg { color: var(--or); }
+
+/* ============================================================
+   MODAL AGENT IA
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+.modal-box {
+  background: var(--noir-card);
+  border: 1px solid rgba(201,160,40,0.2);
+  width: 100%;
+  max-width: 580px;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+.modal-overlay.active .modal-box { transform: translateY(0); }
+.modal-header {
+  padding: 32px 36px 24px;
+  border-bottom: 1px solid var(--noir-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.modal-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 500;
+}
+.modal-subtitle { font-size: 13px; color: var(--gris); margin-top: 4px; }
+.modal-close {
+  width: 36px; height: 36px;
+  border: 1px solid var(--noir-border);
+  background: transparent;
+  color: var(--gris);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+.modal-close:hover { border-color: var(--or); color: var(--or); }
+.modal-body { padding: 36px; }
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 28px;
+  min-height: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.chat-msg {
+  display: flex;
+  gap: 12px;
+  animation: fadeInUp 0.3s ease;
+}
+.chat-msg.user { flex-direction: row-reverse; }
+.chat-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+.chat-msg:not(.user) .chat-avatar {
+  background: linear-gradient(135deg, var(--or) 0%, var(--or-dark) 100%);
+  color: var(--noir);
+}
+.chat-msg.user .chat-avatar {
+  background: var(--noir-border);
+  color: var(--gris-light);
+}
+.chat-bubble {
+  max-width: 75%;
+  padding: 14px 18px;
+  font-size: 14px;
+  line-height: 1.6;
+  border-radius: 2px;
+}
+.chat-msg:not(.user) .chat-bubble {
+  background: rgba(201,160,40,0.08);
+  border: 1px solid rgba(201,160,40,0.15);
+  color: rgba(255,255,255,0.85);
+}
+.chat-msg.user .chat-bubble {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.85);
+}
+.chat-quick-replies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.quick-reply {
+  padding: 8px 16px;
+  border: 1px solid rgba(201,160,40,0.3);
+  background: transparent;
+  color: var(--or);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-sans);
+}
+.quick-reply:hover {
+  background: rgba(201,160,40,0.1);
+}
+.chat-input-row {
+  display: flex;
+  gap: 12px;
+}
+.chat-input-row .form-input { flex: 1; margin: 0; }
+.chat-send {
+  width: 48px; height: 48px;
+  background: var(--or);
+  border: none;
+  color: var(--noir);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+.chat-send:hover { background: var(--or-light); }
+.chat-typing {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 14px 18px;
+  background: rgba(201,160,40,0.08);
+  border: 1px solid rgba(201,160,40,0.15);
+  width: fit-content;
+  display: none;
+}
+.chat-typing span {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--or);
+  animation: wave 1.2s ease-in-out infinite;
+}
+.chat-typing span:nth-child(2) { animation-delay: 0.15s; }
+.chat-typing span:nth-child(3) { animation-delay: 0.3s; }
+
+/* ============================================================
+   MODAL FICHE BIEN
+   ============================================================ */
+.listing-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.listing-modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+.listing-modal-box {
+  background: var(--noir-card);
+  border: 1px solid rgba(201,160,40,0.2);
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(30px);
+  transition: transform 0.35s ease;
+}
+.listing-modal-overlay.active .listing-modal-box {
+  transform: translateY(0);
+}
+.lm-gallery {
+  position: relative;
+  width: 100%;
+  height: 340px;
+  background: #000;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.lm-gallery-main {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.25s ease;
+}
+.lm-gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(201,160,40,0.35);
+  color: var(--or);
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  transition: background 0.2s;
+  z-index: 10;
+  user-select: none;
+}
+.lm-gallery-nav:hover { background: rgba(201,160,40,0.22); }
+.lm-gallery-prev { left: 14px; }
+.lm-gallery-next { right: 14px; }
+.lm-gallery-counter {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  background: rgba(0,0,0,0.65);
+  color: rgba(255,255,255,0.8);
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  font-family: var(--font-sans);
+}
+.lm-gallery-nav.hidden,
+.lm-gallery-counter.hidden { display: none; }
+.lm-invest-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(201,160,40,0.08);
+  border: 1px solid rgba(201,160,40,0.25);
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: var(--or-light);
+}
+.lm-dpe {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--noir-border);
+}
+.lm-dpe-block { display: flex; align-items: center; gap: 8px; }
+.lm-dpe-letter {
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 16px; color: #fff;
+  flex-shrink: 0;
+}
+.lm-dpe-info { display: flex; flex-direction: column; gap: 2px; }
+.lm-dpe-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+.lm-dpe-value { font-size: 12px; color: rgba(255,255,255,0.75); font-weight: 500; }
+.lm-dpe-sep { width: 1px; height: 30px; background: var(--noir-border); margin: 0 6px; }
+.lm-dpe-cost {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: rgba(255,255,255,0.45);
+  margin-left: auto;
+}
+.lm-dpe-cost svg { color: var(--or); flex-shrink: 0; }
+.listing-modal-body { padding: 36px; }
+.listing-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+.listing-modal-close {
+  width: 36px; height: 36px;
+  background: transparent;
+  border: 1px solid var(--noir-border);
+  color: var(--gris);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+.listing-modal-close:hover { border-color: var(--or); color: var(--or); }
+.listing-modal-ref {
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--or); margin-bottom: 8px;
+}
+.listing-modal-title {
+  font-family: var(--font-serif);
+  font-size: 24px; font-weight: 500;
+  margin-bottom: 0;
+}
+.listing-modal-price {
+  font-family: var(--font-serif);
+  font-size: 26px; font-weight: 600;
+  color: var(--or);
+  white-space: nowrap;
+}
+.listing-modal-specs {
+  display: flex; gap: 24px; flex-wrap: wrap;
+  padding: 20px 0;
+  border-top: 1px solid var(--noir-border);
+  border-bottom: 1px solid var(--noir-border);
+  margin-bottom: 24px;
+}
+.listing-modal-spec {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; color: var(--gris-light);
+}
+.listing-modal-spec svg { color: var(--or); flex-shrink: 0; }
+.listing-modal-desc {
+  font-size: 14px; line-height: 1.8;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 28px;
+}
+.listing-modal-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+/* ============================================================
+   ANIMATIONS ON SCROLL
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ============================================================
+   MOBILE NAV
+   ============================================================ */
+.mobile-menu {
+  position: fixed;
+  top: 80px; left: 0; right: 0;
+  background: rgba(10,10,10,0.98);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--noir-border);
+  padding: 30px 40px;
+  z-index: 999;
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: var(--transition);
+}
+.mobile-menu.open { transform: translateY(0); opacity: 1; }
+.mobile-menu ul { list-style: none; display: flex; flex-direction: column; gap: 24px; }
+.mobile-menu a {
+  color: var(--blanc);
+  text-decoration: none;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+.mobile-menu a:hover { color: var(--or); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1100px) {
+  .listings-grid { grid-template-columns: repeat(2, 1fr); }
+  .listing-card.featured { grid-column: span 2; }
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .chiffres-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .agent-wrapper { gap: 50px; }
+  .agent-orb-container { width: 300px; height: 300px; }
+}
+@media (max-width: 768px) {
+  nav { padding: 0 24px; }
+  .nav-links, .nav-cta { display: none; }
+  .hamburger { display: flex; }
+  .section-inner { padding: 0 24px; }
+  .listings-grid { grid-template-columns: 1fr; }
+  .listing-card.featured { grid-column: span 1; }
+  .services-grid { grid-template-columns: 1fr; }
+  .chiffres-grid { grid-template-columns: repeat(2, 1fr); }
+  .agent-wrapper { grid-template-columns: 1fr; gap: 60px; }
+  .agent-right { order: -1; }
+  .agent-orb-container { width: 260px; height: 260px; }
+  .estimation-wrapper { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; gap: 40px; }
+  .footer-inner { padding: 0 24px; }
+  .hero-badges { display: none; }
+  .sticky-cta { bottom: 20px; right: 16px; }
+  .form-card { padding: 30px 24px; }
+  .modal-box { margin: 0; max-height: 100vh; }
+  .modal-body { padding: 24px; }
+  .modal-header { padding: 24px 24px 20px; }
+  .agence-grid { grid-template-columns: 1fr; gap: 40px; }
+  .team-grid { grid-template-columns: 1fr; }
+  .agence-facts { gap: 20px; }
+  .loc-row { flex-wrap: wrap; gap: 8px; padding: 14px 16px; }
+  .loc-detail { min-width: auto; }
+  .loc-price { min-width: auto; }
+}
+
+/* ============================================================
+   LOCATION LISTINGS
+   ============================================================ */
+.loc-filter {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 32px; align-items: center;
+}
+.loc-filter-select {
+  background: var(--noir-card); border: 1px solid var(--noir-border);
+  color: var(--blanc-soft); padding: 10px 16px; font-size: 12px;
+  font-family: var(--font-sans); cursor: pointer; letter-spacing: 0.5px;
+  min-width: 160px;
+}
+.loc-filter-select:focus { outline: none; border-color: rgba(201,160,40,0.4); }
+.loc-grid {
+  border: 1px solid var(--noir-border);
+}
+.loc-row {
+  display: flex; align-items: center; gap: 0;
+  border-bottom: 1px solid var(--noir-border);
+  padding: 16px 24px; transition: background 0.2s;
+}
+.loc-row:last-child { border-bottom: none; }
+.loc-row:hover { background: rgba(255,255,255,0.025); }
+.loc-icon {
+  width: 32px; height: 32px; background: rgba(201,160,40,0.07);
+  border: 1px solid rgba(201,160,40,0.18); display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; margin-right: 18px;
+}
+.loc-icon svg { color: var(--or); }
+.loc-title { font-size: 13px; font-weight: 500; letter-spacing: 0.3px; flex: 1; min-width: 180px; }
+.loc-detail { font-size: 12px; color: var(--gris); margin: 0 20px; min-width: 70px; text-align: right; }
+.loc-detail strong { color: var(--gris-light); font-weight: 400; }
+.loc-price {
+  font-family: var(--font-serif); font-size: 17px; color: var(--or);
+  margin-right: 24px; white-space: nowrap; min-width: 120px; text-align: right;
+}
+.loc-price span { font-size: 11px; color: var(--gris); font-family: var(--font-sans); display: block; }
+.loc-cta {
+  padding: 7px 14px; background: transparent; border: 1px solid var(--noir-border);
+  color: var(--gris-light); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  cursor: pointer; transition: var(--transition); white-space: nowrap;
+  text-decoration: none; display: inline-block; font-family: var(--font-sans);
+}
+.loc-cta:hover { border-color: var(--or); color: var(--or); }
+
+/* ============================================================
+   AGENCE / ABOUT
+   ============================================================ */
+.agence-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+}
+.agence-desc { font-size: 14px; line-height: 1.9; color: rgba(255,255,255,0.62); margin-bottom: 16px; }
+.agence-facts { display: flex; gap: 40px; margin: 32px 0; flex-wrap: wrap; }
+.agence-fact-num {
+  font-family: var(--font-serif); font-size: 38px; color: var(--or); line-height: 1;
+}
+.agence-fact-lbl { font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gris); margin-top: 6px; }
+.agence-coverage {
+  border: 1px solid var(--noir-border); padding: 18px 20px; margin-top: 20px;
+  border-left: 2px solid var(--or);
+}
+.agence-coverage-title { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--or); margin-bottom: 10px; }
+.agence-coverage p { font-size: 13px; color: var(--gris); line-height: 1.7; }
+.agence-services { margin-top: 20px; }
+.agence-services-title { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--gris); margin-bottom: 12px; }
+.agence-services-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.agence-services-tag {
+  padding: 5px 12px; border: 1px solid var(--noir-border);
+  font-size: 11px; letter-spacing: 0.5px; color: var(--gris-light);
+}
+.team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.team-card {
+  background: var(--noir-card); border: 1px solid var(--noir-border);
+  padding: 28px 16px; text-align: center; transition: var(--transition);
+}
+.team-card:hover { border-color: rgba(201,160,40,0.3); transform: translateY(-2px); }
+.team-photo { width: 100%; height: 180px; overflow: hidden; border-radius: 8px 8px 0 0; margin: -20px -20px 16px -20px; width: calc(100% + 40px); }
+.team-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+.team-avatar {
+  width: 56px; height: 56px;
+  background: linear-gradient(135deg, #5C4008, #C9A028);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-serif); font-size: 26px; font-weight: 600; color: var(--noir);
+  margin: 0 auto 16px;
+}
+.team-name { font-family: var(--font-serif); font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+.team-role { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--or); }
+.team-contact { font-size: 11px; color: var(--gris); margin-top: 14px; line-height: 1.7; }
+
+/* ============================================================
+   ALERTE EMAIL
+   ============================================================ */
+.alerte-wrapper { max-width: 720px; margin: 0 auto; }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg width="42" height="42" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="lgF" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#8B6514"/>
+            <stop offset="45%" stop-color="#EDD060"/>
+            <stop offset="100%" stop-color="#7A5C0A"/>
+          </linearGradient>
+          <linearGradient id="lgB" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#6B5010"/>
+            <stop offset="100%" stop-color="#4A3808"/>
+          </linearGradient>
+        </defs>
+        <!-- Fond -->
+        <rect x="1" y="1" width="44" height="44" fill="rgba(10,8,2,0.85)"/>
+        <!-- Bordure extérieure -->
+        <rect x="1" y="1" width="44" height="44" stroke="url(#lgF)" stroke-width="1.8" fill="none"/>
+        <!-- Bordure intérieure fine -->
+        <rect x="4" y="4" width="38" height="38" stroke="url(#lgF)" stroke-width="0.5" fill="none" opacity="0.35"/>
+        <!-- D arrière (décalé +7x +6y) -->
+        <path d="M 22,12 A 11,14 0 0 1 22,40 L 17,40 L 17,12 Z" fill="url(#lgB)"/>
+        <!-- D avant (premier plan) -->
+        <path d="M 15,6 A 11,14 0 0 1 15,34 L 10,34 L 10,6 Z" fill="url(#lgF)"/>
+      </svg>
+    </div>
+    <div class="nav-logo-text">
+      <span class="nav-logo-sub">Agence Immobilière</span>
+      <span class="nav-logo-name">Desjardins</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#hero">Accueil</a></li>
+    <li><a href="#vente">Vente</a></li>
+    <li><a href="#location">Location</a></li>
+    <li><a href="#simulateur">Simulateur</a></li>
+    <li><a href="#estimation">Estimation</a></li>
+    <li><a href="#alerte">Alerte Email</a></li>
+    <li><a href="#agence">Agence</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburgerBtn" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#hero" onclick="closeMenu()">Accueil</a></li>
+    <li><a href="#vente" onclick="closeMenu()">Vente</a></li>
+    <li><a href="#location" onclick="closeMenu()">Location</a></li>
+    <li><a href="#simulateur" onclick="closeMenu()">Simulateur</a></li>
+    <li><a href="#estimation" onclick="closeMenu()">Estimation</a></li>
+    <li><a href="#alerte" onclick="closeMenu()">Alerte Email</a></li>
+    <li><a href="#agence" onclick="closeMenu()">Agence</a></li>
+    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+    <li><a href="tel:0189480917" onclick="closeMenu()">01 89 48 09 17</a></li>
+  </ul>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow"><span class="ey-text">Vernon · Normandie · Vallée de la Seine</span></p>
+    <h1 class="hero-title">
+      Le Meilleur Chemin<br>
+      Pour Trouver Votre<br>
+      <em class="shimmer-text">Bien</em>
+    </h1>
+    <p class="hero-subtitle">Entre Paris et Rouen, votre agence immobilière de confiance à Vernon vous accompagne dans tous vos projets d'achat, de vente et de location.</p>
+    <div class="hero-ctas">
+      <a href="#vente" class="btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+        Voir nos annonces
+      </a>
+      <a href="#estimation" class="btn-secondary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Estimation gratuite
+      </a>
+    </div>
+  </div>
+  <div class="hero-badges">
+    <div class="hero-badge">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Réponse immédiate
+    </div>
+    <div class="hero-badge">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Visite rapide possible
+    </div>
+    <div class="hero-badge">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      Accompagnement personnalisé
+    </div>
+    <div class="hero-badge">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Agence locale de confiance
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span>Découvrir</span>
+  </div>
+</section>
+
+<!-- AGENT IA -->
+<section id="agent-ia">
+  <div class="section-inner">
+    <div class="agent-wrapper">
+      <div class="agent-left reveal">
+        <p class="section-eyebrow"><span class="ey-text">Disponible 24h/24 · 7j/7</span></p>
+        <h2 class="section-title">Agent Vocal <em class="shimmer-text">IA</em><br>de l'Agence</h2>
+        <p class="agent-desc">Appelez directement notre agent IA vocal. Il répond instantanément, comprend votre projet, vous présente les biens disponibles et peut prendre un rendez-vous avec un conseiller — à n'importe quelle heure.</p>
+        <div class="agent-features">
+          <div class="agent-feature"><div class="agent-feature-dot"></div> Qualification instantanée de votre projet</div>
+          <div class="agent-feature"><div class="agent-feature-dot"></div> Présentation des biens en vente et location</div>
+          <div class="agent-feature"><div class="agent-feature-dot"></div> Prise de rendez-vous en temps réel</div>
+          <div class="agent-feature"><div class="agent-feature-dot"></div> Résumé envoyé par SMS après l'appel</div>
+        </div>
+        <div class="voice-cta-group">
+          <button class="btn-primary voice-call-btn" id="voiceCallBtn" onclick="startVoiceCall()">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            <span id="voiceCallBtnLabel">Nous joindre 24h/24 &amp; 7j/7 — Appeler ici</span>
+          </button>
+          <a href="tel:0189480917" class="btn-secondary voice-phone-link">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            01 89 48 09 17
+          </a>
+        </div>
+        <p class="voice-note">Appel depuis le navigateur ou par téléphone · Gratuit</p>
+      </div>
+      <div class="agent-right reveal reveal-delay-2">
+        <div class="agent-orb-container">
+          <div class="agent-orb-ring"></div>
+          <div class="agent-orb-ring"></div>
+          <div class="agent-orb-ring"></div>
+          <div class="agent-orb-center" id="orbCenter" onclick="startVoiceCall()">
+            <div class="agent-orb-icon" id="orbIcon">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+              </svg>
+            </div>
+            <div class="agent-wave-bars" id="orbWave">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <p class="agent-orb-label" id="orbLabel">Appeler</p>
+          </div>
+        </div>
+        <!-- Statut appel -->
+        <div class="voice-status" id="voiceStatus" style="display:none;">
+          <div class="voice-status-dot"></div>
+          <span id="voiceStatusText">Connexion…</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VENTE -->
+<section id="vente">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <p class="section-eyebrow"><span class="ey-text">Vernon &amp; Région</span></p>
+      <h2 class="section-title">Vente</h2>
+      <p class="section-desc">Notre sélection de biens immobiliers à vendre à Vernon et dans la vallée de la Seine.</p>
+    </div>
+    <div class="listings-filter reveal">
+      <button class="filter-btn active" onclick="filterListings(this,'all')">Tous</button>
+      <button class="filter-btn" onclick="filterListings(this,'vente')">Maisons</button>
+      <button class="filter-btn" onclick="filterListings(this,'location')">Appartements</button>
+    </div>
+    <div class="listings-grid" id="listingsGrid">
+
+      <!-- Bien 1 - Featured -->
+      <div class="listing-card featured reveal" data-type="vente">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/171451/171451768_1.jpg?1777502126" alt="Maison Gommecourt" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-exclusif"><span class="tag-exclusif-text">Exclusivité</span></span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('gommecourt')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Gommecourt · Réf. 171451768</span></p>
+          <h3 class="listing-title">Corps de ferme — 4 Maisons</h3>
+          <div class="listing-specs">
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              216 m²
+            </div>
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              9 pièces
+            </div>
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+              5 chambres
+            </div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">
+              334 000 €
+              <span>Prix HAI</span>
+            </div>
+            <a href="javascript:void(0)" onclick="openListingModal('gommecourt')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bien 2 -->
+      <div class="listing-card reveal reveal-delay-1" data-type="vente">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/172196/172196991_1.jpg?1777502126" alt="Maison Le Val d'Hazey" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-vente">Vente</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('valhazey')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Le Val d'Hazey · Réf. 172196991</span></p>
+          <h3 class="listing-title">Maison avec Cachet à Rénover</h3>
+          <div class="listing-specs">
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              115 m²
+            </div>
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              4 pièces
+            </div>
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+              3 chambres
+            </div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">
+              231 000 €
+              <span>Prix HAI</span>
+            </div>
+            <a href="javascript:void(0)" onclick="openListingModal('valhazey')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bien 3 -->
+      <div class="listing-card reveal reveal-delay-2" data-type="vente">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/172757/172757442_1.jpg?1777502126" alt="Appartement T3 Vernon" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-vente">Vente</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('vernon-t3')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Vernon · Réf. 172757442</span></p>
+          <h3 class="listing-title">Appartement T3 — Vendu Loué</h3>
+          <div class="listing-specs">
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              63,6 m²
+            </div>
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              3 pièces
+            </div>
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+              2 chambres
+            </div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">
+              155 000 €
+              <span>Prix HAI</span>
+            </div>
+            <a href="javascript:void(0)" onclick="openListingModal('vernon-t3')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bien 4 -->
+      <div class="listing-card reveal reveal-delay-3" data-type="vente">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/172226/172226570_1.jpg?1777502126" alt="Appartement Saint Marcel" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-vente">Vente</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('saint-marcel')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Saint-Marcel · Réf. 172226570</span></p>
+          <h3 class="listing-title">Appartement T3 — Investissement Locatif</h3>
+          <div class="listing-specs">
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              62,95 m²
+            </div>
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              3 pièces
+            </div>
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+              2 chambres
+            </div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">
+              127 000 €
+              <span>Prix HAI</span>
+            </div>
+            <a href="javascript:void(0)" onclick="openListingModal('saint-marcel')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bien 5 -->
+      <div class="listing-card reveal" data-type="vente">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/172226/172226571_1.jpg?1777502126" alt="Appartement T2 Vernon" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-vente">Vente</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('vernon-t2a')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Vernon · Réf. 172226571</span></p>
+          <h3 class="listing-title">Appartement T2 — Vendu Loué</h3>
+          <div class="listing-specs">
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              42,32 m²
+            </div>
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              2 pièces
+            </div>
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+              1 chambre
+            </div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">
+              105 000 €
+              <span>Prix HAI</span>
+            </div>
+            <a href="javascript:void(0)" onclick="openListingModal('vernon-t2a')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bien 6 -->
+      <div class="listing-card reveal reveal-delay-1" data-type="vente">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/172866/172866627_1.jpg?1777502126" alt="Appartement T2 Vernon" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-vente">Vente</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('vernon-t2b')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Vernon · Réf. 172866627</span></p>
+          <h3 class="listing-title">Appartement T2 avec Jardin</h3>
+          <div class="listing-specs">
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              46,4 m²
+            </div>
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              2 pièces
+            </div>
+            <div class="listing-spec">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+              1 chambre
+            </div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">
+              125 000 €
+              <span>Prix HAI</span>
+            </div>
+            <a href="javascript:void(0)" onclick="openListingModal('vernon-t2b')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="listings-cta-row reveal">
+      <a href="https://www.agencedesjardins.fr/fr" target="_blank" class="btn-secondary">Voir toutes nos annonces</a>
+    </div>
+  </div>
+</section>
+
+<!-- CHIFFRES -->
+<section id="chiffres">
+  <div class="section-inner">
+    <div class="chiffres-grid">
+      <div class="chiffre-item reveal">
+        <div class="chiffre-number">30+</div>
+        <div class="chiffre-label">Années à Vernon</div>
+      </div>
+      <div class="chiffre-item reveal reveal-delay-1">
+        <div class="chiffre-number">1 200</div>
+        <div class="chiffre-label">Transactions réussies</div>
+      </div>
+      <div class="chiffre-item reveal reveal-delay-2">
+        <div class="chiffre-number">98%</div>
+        <div class="chiffre-label">Clients satisfaits</div>
+      </div>
+      <div class="chiffre-item reveal reveal-delay-3">
+        <div class="chiffre-number">24h</div>
+        <div class="chiffre-label">Délai de réponse</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section id="location">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <p class="section-eyebrow"><span class="ey-text">Vernon</span></p>
+      <h2 class="section-title">Location</h2>
+      <p class="section-desc">Appartements, maisons et locaux disponibles à la location à Vernon et communes voisines.</p>
+    </div>
+    <div class="loc-filter reveal">
+      <select class="loc-filter-select">
+        <option>Tous types</option>
+        <option>Appartement</option>
+        <option>Maison</option>
+        <option>Local commercial</option>
+        <option>Parking / Box</option>
+      </select>
+      <select class="loc-filter-select">
+        <option>Toutes surfaces</option>
+        <option>- de 30 m²</option>
+        <option>30 – 50 m²</option>
+        <option>50 – 80 m²</option>
+        <option>+ de 80 m²</option>
+      </select>
+      <select class="loc-filter-select">
+        <option>Tous budgets</option>
+        <option>- de 600 €/mois</option>
+        <option>600 – 900 €/mois</option>
+        <option>+ de 900 €/mois</option>
+      </select>
+    </div>
+    <div class="listings-grid reveal">
+
+      <!-- Parking -->
+      <div class="listing-card reveal" data-type="location">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/172226/172226575_1.jpg?1772416658" alt="Place de stationnement Vernon" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-location">Location</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('loc-parking')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Vernon · Réf. 172226575</span></p>
+          <h3 class="listing-title">Place de Stationnement Extérieure</h3>
+          <div class="listing-specs">
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Parking</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Vernon</div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">50 €<span>/mois</span></div>
+            <a href="javascript:void(0)" onclick="openListingModal('loc-parking')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Studio -->
+      <div class="listing-card reveal reveal-delay-1" data-type="location">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/172886/172886252_1.jpg?1777079899" alt="Studio meublé Vernon" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-location">Location</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('loc-studio')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Vernon · Réf. 172886252</span></p>
+          <h3 class="listing-title">Studio Meublé Rénové</h3>
+          <div class="listing-specs">
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>19,45 m²</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>1 pièce</div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">550 €<span>/mois</span></div>
+            <a href="javascript:void(0)" onclick="openListingModal('loc-studio')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- T2 41.38 -->
+      <div class="listing-card reveal reveal-delay-2" data-type="location">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/172886/172886251_1.jpg?1777079897" alt="Appartement T2 Vernon" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-location">Location</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('loc-t2-4138')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Vernon · Réf. 172886251</span></p>
+          <h3 class="listing-title">Appartement T2 — 41,38 m²</h3>
+          <div class="listing-specs">
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>41,38 m²</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>2 pièces</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>1 chambre</div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">585 €<span>/mois</span></div>
+            <a href="javascript:void(0)" onclick="openListingModal('loc-t2-4138')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- T2 46.01 -->
+      <div class="listing-card reveal" data-type="location">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/172528/172528741_1.jpg?1774575921" alt="Appartement T2 proche gare Vernon" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-location">Location</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('loc-t2-4601')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Vernon · Réf. 172528741</span></p>
+          <h3 class="listing-title">Appartement T2 — Proche Gare</h3>
+          <div class="listing-specs">
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>46,01 m²</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>2 pièces</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>1 chambre</div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">630 €<span>/mois</span></div>
+            <a href="javascript:void(0)" onclick="openListingModal('loc-t2-4601')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- T2 bis -->
+      <div class="listing-card reveal reveal-delay-1" data-type="location">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/171602/171602868_1.jpg?1771556247" alt="T2 bis centre Vernon" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-location">Location</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('loc-t2bis')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Vernon · Réf. 171602868</span></p>
+          <h3 class="listing-title">T2 bis — Centre Piétonnier</h3>
+          <div class="listing-specs">
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>41,77 m²</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>3 pièces</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>1 chambre</div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">640 €<span>/mois</span></div>
+            <a href="javascript:void(0)" onclick="openListingModal('loc-t2bis')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- T2 Duplex -->
+      <div class="listing-card reveal reveal-delay-2" data-type="location">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/171389/171389023_1.jpg?1769478537" alt="T2 Duplex meublé Vernon" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-location">Location</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('loc-t2-duplex')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Vernon · Réf. 171389023</span></p>
+          <h3 class="listing-title">T2 Duplex Meublé</h3>
+          <div class="listing-specs">
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>39,29 m²</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>2 pièces</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>1 chambre</div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">650 €<span>/mois</span></div>
+            <a href="javascript:void(0)" onclick="openListingModal('loc-t2-duplex')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- T2 40.22 -->
+      <div class="listing-card reveal" data-type="location">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/172497/172497348_1.jpg?1774362260" alt="Appartement T2 sécurisé Vernon" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-location">Location</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('loc-t2-4022')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Vernon · Réf. 172497348</span></p>
+          <h3 class="listing-title">Appartement T2 — Immeuble Sécurisé</h3>
+          <div class="listing-specs">
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>40,22 m²</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>2 pièces</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>1 chambre</div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">660 €<span>/mois</span></div>
+            <a href="javascript:void(0)" onclick="openListingModal('loc-t2-4022')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- T2/3 -->
+      <div class="listing-card reveal reveal-delay-1" data-type="location">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/171675/171675895_1.jpg?1773796341" alt="Appartement T2/3 Vernon" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-location">Location</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('loc-t23')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Vernon · Réf. 171675895</span></p>
+          <h3 class="listing-title">Appartement T2/3 sur Deux Niveaux</h3>
+          <div class="listing-specs">
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>44,85 m²</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>3 pièces</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>2 chambres</div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">720 €<span>/mois</span></div>
+            <a href="javascript:void(0)" onclick="openListingModal('loc-t23')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Maison T4 -->
+      <div class="listing-card reveal reveal-delay-2" data-type="location">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/172004/172004164_1.jpg?1770857842" alt="Maison de ville T4 Vernon" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-location">Location</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('loc-maison-t4')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Vernon · Réf. 172004164</span></p>
+          <h3 class="listing-title">Maison de Ville T4 avec Jardin</h3>
+          <div class="listing-specs">
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>88,96 m²</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>4 pièces</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>3 chambres</div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">874 €<span>/mois</span></div>
+            <a href="javascript:void(0)" onclick="openListingModal('loc-maison-t4')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- T4 hyper centre -->
+      <div class="listing-card reveal" data-type="location">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/172721/172721884_1.jpg?1775959409" alt="Appartement T4 hyper centre Vernon" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-location">Location</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('loc-t4')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Vernon · Réf. 172721884</span></p>
+          <h3 class="listing-title">Appartement T4 — Hyper Centre</h3>
+          <div class="listing-specs">
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>72,53 m²</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>4 pièces</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>3 chambres</div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">890 €<span>/mois</span></div>
+            <a href="javascript:void(0)" onclick="openListingModal('loc-t4')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Local commercial -->
+      <div class="listing-card reveal reveal-delay-1" data-type="location">
+        <div class="listing-img">
+          <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/172226/172226574_1.jpg?1772416657" alt="Local commercial Vernon" loading="lazy">
+          <div class="listing-img-overlay"></div>
+          <span class="listing-tag tag-location">Location</span>
+          <div class="listing-quick-cta"><a href="javascript:void(0)" onclick="openListingModal('loc-commercial')">Voir le bien →</a></div>
+        </div>
+        <div class="listing-body">
+          <p class="listing-location"><span class="loc-text">Vernon · Réf. 172226574</span></p>
+          <h3 class="listing-title">Local Commercial — 242 m²</h3>
+          <div class="listing-specs">
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>242 m²</div>
+            <div class="listing-spec"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Commercial</div>
+          </div>
+          <div class="listing-footer">
+            <div class="listing-price">2 650 €<span>/mois</span></div>
+            <a href="javascript:void(0)" onclick="openListingModal('loc-commercial')" class="btn-secondary" style="padding:10px 20px;font-size:11px;">Voir les détails</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div style="text-align:center;margin-top:36px;" class="reveal">
+      <a href="#contact" class="btn-secondary">Nous contacter pour une location</a>
+    </div>
+  </div>
+</section>
+
+<!-- SIMULATEUR CRÉDIT -->
+<section id="simulateur" style="padding: 80px 0; background: linear-gradient(180deg, #f8faff 0%, #ffffff 100%);">
+  <div class="section-inner">
+    <div class="section-header reveal" style="margin-bottom: 40px;">
+      <p class="section-eyebrow"><span class="ey-text">Gratuit & Instantané</span></p>
+      <h2 class="section-title">Simulez votre <em class="shimmer-text">crédit immobilier</em></h2>
+      <p class="section-desc">Évaluez votre capacité d'achat, votre mensualité et votre score acheteur en 2 minutes.</p>
+    </div>
+    <div id="simulateur-widget" style="max-width:600px; margin:0 auto;"></div>
+  </div>
+</section>
+
+<!-- ESTIMATION FORM -->
+<section id="estimation">
+  <div class="section-inner">
+    <div class="estimation-wrapper">
+      <div class="estimation-left reveal">
+        <p class="section-eyebrow"><span class="ey-text">Gratuit & Sans Engagement</span></p>
+        <h2 class="section-title">Estimer Votre Bien</h2>
+        <p class="section-desc" style="text-align:left;margin:0 0 0 0;max-width:none;">Un agent immobilier est la seule personne pouvant vous apporter la véritable valeur de votre bien. Notre connaissance du marché de Vernon et de la vallée de la Seine vous garantit une estimation juste et fiable.</p>
+        <div class="estimation-promise">
+          <div class="estimation-promise-item">
+            <div class="promise-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="promise-text">
+              <h4>Confidentiel & Sécurisé</h4>
+              <p>Vos informations restent strictement confidentielles</p>
+            </div>
+          </div>
+          <div class="estimation-promise-item">
+            <div class="promise-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="promise-text">
+              <h4>Réponse sous 24h</h4>
+              <p>Un expert vous contacte dans les 24 heures</p>
+            </div>
+          </div>
+          <div class="estimation-promise-item">
+            <div class="promise-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            </div>
+            <div class="promise-text">
+              <h4>100% Gratuit</h4>
+              <p>Aucun engagement, aucun frais</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <div class="form-card">
+          <h3 class="form-title">Demande d'Estimation</h3>
+          <p class="form-subtitle">Recevez une évaluation précise de votre bien</p>
+          <form id="estimationForm" onsubmit="handleSubmit(event,'estimation')">
+            <div class="form-group">
+              <label class="form-label">Type de bien *</label>
+              <select class="form-select" required>
+                <option value="">Sélectionner...</option>
+                <option>Maison / Villa / Propriété</option>
+                <option>Appartement / Studio</option>
+                <option>Local commercial</option>
+                <option>Terrain</option>
+                <option>Immeuble</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Adresse postale *</label>
+              <input type="text" class="form-input" placeholder="Ex : 15 rue de la Paix, Vernon" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Surface (m²) *</label>
+                <input type="number" class="form-input" placeholder="Ex : 85" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nb de pièces *</label>
+                <select class="form-select" required>
+                  <option value="">...</option>
+                  <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Prénom *</label>
+                <input type="text" class="form-input" placeholder="Marie" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nom *</label>
+                <input type="text" class="form-input" placeholder="Dupont" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Email *</label>
+                <input type="email" class="form-input" placeholder="marie@exemple.fr" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Téléphone</label>
+                <input type="tel" class="form-input" placeholder="06 00 00 00 00">
+              </div>
+            </div>
+            <button type="submit" class="btn-primary form-submit">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Demander mon estimation gratuite
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALERTE EMAIL -->
+<section id="alerte">
+  <div class="section-inner">
+    <div class="alerte-wrapper">
+      <div class="section-header reveal">
+        <p class="section-eyebrow"><span class="ey-text">Ne Ratez Aucune Opportunité</span></p>
+        <h2 class="section-title">Alerte Email</h2>
+        <p class="section-desc">Recevez en avant-première les nouvelles annonces correspondant à vos critères de recherche.</p>
+      </div>
+      <div class="reveal reveal-delay-1">
+        <div class="form-card">
+          <h3 class="form-title">Créer mon alerte</h3>
+          <p class="form-subtitle">Soyez alerté dès qu'un bien correspond à votre recherche</p>
+          <form id="alerteForm" onsubmit="handleSubmit(event,'alerte')">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Nom *</label>
+                <input type="text" class="form-input" placeholder="Votre nom" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email *</label>
+                <input type="email" class="form-input" placeholder="votre@email.fr" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Type de transaction</label>
+                <select class="form-select">
+                  <option>Vente</option>
+                  <option>Location</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Type de bien</label>
+                <select class="form-select">
+                  <option value="">Tous types</option>
+                  <option>Maison</option>
+                  <option>Appartement</option>
+                  <option>Local commercial</option>
+                  <option>Terrain</option>
+                  <option>Parking</option>
+                  <option>Immeuble</option>
+                  <option>Neuf (VEFA)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Ville</label>
+                <select class="form-select">
+                  <option value="">Toutes les villes</option>
+                  <option>Vernon</option>
+                  <option>Gommecourt</option>
+                  <option>Le Val d'Hazey</option>
+                  <option>Saint-Marcel</option>
+                  <option>Pacy-sur-Eure</option>
+                  <option>Mont-Saint-Aignan</option>
+                  <option>Rouvray</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Rayon</label>
+                <select class="form-select">
+                  <option>0 km</option>
+                  <option>5 km</option>
+                  <option>10 km</option>
+                  <option>20 km</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Surface min. (m²)</label>
+                <input type="number" class="form-input" placeholder="Ex : 40">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Pièces minimum</label>
+                <select class="form-select">
+                  <option value="">Peu importe</option>
+                  <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Budget min. (€)</label>
+                <input type="number" class="form-input" placeholder="Ex : 80 000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Budget max. (€)</label>
+                <input type="number" class="form-input" placeholder="Ex : 300 000">
+              </div>
+            </div>
+            <button type="submit" class="btn-primary form-submit">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Créer mon alerte email
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENCE -->
+<section id="agence">
+  <div class="section-inner">
+    <div class="agence-grid">
+      <div class="reveal">
+        <p class="section-eyebrow" style="justify-content:flex-start;"><span class="ey-text">Depuis 1994</span></p>
+        <h2 class="section-title" style="text-align:left;">L'Immobilier sur Vernon<br>et sa Région</h2>
+        <p class="agence-desc">Agence immobilière indépendante et familiale, nous sommes installés en plein centre-ville de Vernon, derrière la Mairie, depuis 1994. Notre expertise du territoire — de Mantes-la-Jolie à Gaillon, de Pacy-sur-Eure à Tourny — vous garantit un accompagnement précis et personnalisé.</p>
+        <p class="agence-desc">Vernon, environ 25 000 habitants, offre un patrimoine architectural exceptionnel : maisons à colombages, immeubles anciens et demeures historiques en centre-ville, pavillons contemporains, maisons normandes et corps de ferme en périphérie. Un marché diversifié que nous connaissons sur le bout des doigts.</p>
+        <div class="agence-facts">
+          <div class="agence-fact">
+            <div class="agence-fact-num shimmer-text">30+</div>
+            <div class="agence-fact-lbl">Ans d'expérience</div>
+          </div>
+          <div class="agence-fact">
+            <div class="agence-fact-num shimmer-text">1994</div>
+            <div class="agence-fact-lbl">Année de création</div>
+          </div>
+          <div class="agence-fact">
+            <div class="agence-fact-num shimmer-text">~25k</div>
+            <div class="agence-fact-lbl">Habitants à Vernon</div>
+          </div>
+        </div>
+        <div class="agence-coverage">
+          <p class="agence-coverage-title">Zone de couverture</p>
+          <p>Vernon · Gommecourt · Saint-Marcel · Le Val d'Hazey · Pacy-sur-Eure · Giverny · Vexin · Gaillon · Mantes-la-Jolie · Tourny et communes voisines</p>
+        </div>
+        <div class="agence-services" style="margin-top:20px;">
+          <p class="agence-services-title">Nos prestations</p>
+          <div class="agence-services-tags">
+            <span class="agence-services-tag">Vente</span>
+            <span class="agence-services-tag">Location</span>
+            <span class="agence-services-tag">Estimation</span>
+            <span class="agence-services-tag">Gestion locative</span>
+            <span class="agence-services-tag">Garantie loyers impayés</span>
+            <span class="agence-services-tag">Viager</span>
+          </div>
+        </div>
+      </div>
+      <div class="reveal reveal-delay-1">
+        <p class="section-eyebrow" style="justify-content:flex-start;margin-bottom:28px;"><span class="ey-text">Notre Équipe</span></p>
+        <div class="team-grid">
+          <div class="team-card">
+            <div class="team-photo"><img src="https://medias.consortium-immobilier.fr/photos_cms4/agencedesjardins.fr/adminsurmesure/9667-3739385-1.jpg" alt="Amélie Bourdon" loading="lazy"></div>
+            <div class="team-name">Amélie Bourdon</div>
+            <div class="team-role">Directrice d'Agence</div>
+            <div class="team-contact">01 89 48 09 17<br>agence@desjardins.immo</div>
+          </div>
+          <div class="team-card">
+            <div class="team-photo"><img src="https://medias.consortium-immobilier.fr/photos_cms4/agencedesjardins.fr/adminsurmesure/9667-4069805-1.jpg" alt="Emma Douis" loading="lazy"></div>
+            <div class="team-name">Emma Douis</div>
+            <div class="team-role">Responsable Location</div>
+            <div class="team-contact">01 89 48 09 17<br>agence@desjardins.immo</div>
+          </div>
+          <div class="team-card">
+            <div class="team-avatar">T</div>
+            <div class="team-name">Tatiana Laforest</div>
+            <div class="team-role">Gestion Locative</div>
+            <div class="team-contact">01 89 48 09 17<br>agence@desjardins.immo</div>
+          </div>
+        </div>
+        <div style="margin-top:32px;display:flex;flex-direction:column;gap:12px;">
+          <a href="tel:0189480917" class="btn-primary" style="justify-content:center;">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            01 89 48 09 17
+          </a>
+          <a href="mailto:agence@desjardins.immo" class="btn-secondary" style="justify-content:center;">
+            agence@desjardins.immo
+          </a>
+          <p style="font-size:12px;color:var(--gris);text-align:center;margin-top:4px;">15/17 Place Barette · 27200 Vernon<br>En plein centre-ville, derrière la Mairie</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div class="reveal">
+        <p class="section-eyebrow" style="justify-content:flex-start;"><span class="ey-text">Nous Joindre</span></p>
+        <h2 class="section-title" style="text-align:left;">Votre Projet<br>à Vernon</h2>
+        <p style="font-size:15px;color:var(--gris);line-height:1.8;margin-bottom:0;max-width:420px;">Notre équipe est à votre disposition du lundi au samedi pour vous accompagner dans tous vos projets immobiliers à Vernon et dans la vallée de la Seine.</p>
+        <div class="contact-info-items">
+          <div class="contact-info-item">
+            <div class="contact-info-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <p class="contact-info-label"><span class="lbl-text">Adresse</span></p>
+              <p class="contact-info-value">15/17 Place Barette, 27200 Vernon</p>
+              <p class="contact-info-sub">En plein centre-ville de Vernon</p>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-info-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            </div>
+            <div>
+              <p class="contact-info-label"><span class="lbl-text">Téléphone</span></p>
+              <p class="contact-info-value">01 89 48 09 17</p>
+              <p class="contact-info-sub">Lun–Ven 9h–19h · Sam 9h–12h</p>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-info-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <p class="contact-info-label"><span class="lbl-text">Email</span></p>
+              <p class="contact-info-value">agence@desjardins.immo</p>
+              <p class="contact-info-sub">Réponse sous 24h</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <div class="form-card">
+          <h3 class="form-title">Nous contacter</h3>
+          <p class="form-subtitle">Un expert vous répond sous 24h</p>
+          <form id="contactForm" onsubmit="handleSubmit(event,'contact')">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Prénom</label>
+                <input type="text" class="form-input" placeholder="Marie" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nom</label>
+                <input type="text" class="form-input" placeholder="Dupont" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-input" placeholder="marie@exemple.fr" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Objet</label>
+              <select class="form-select" required>
+                <option value="">Sélectionner...</option>
+                <option>Achat d'un bien</option>
+                <option>Vente d'un bien</option>
+                <option>Location</option>
+                <option>Estimation</option>
+                <option>Conseil patrimonial</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Message (optionnel)</label>
+              <textarea class="form-textarea" placeholder="Décrivez votre projet..."></textarea>
+            </div>
+            <button type="submit" class="btn-primary form-submit">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Envoyer ma demande
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <svg width="36" height="36" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="flgF" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8B6514"/><stop offset="45%" stop-color="#EDD060"/><stop offset="100%" stop-color="#7A5C0A"/></linearGradient>
+              <linearGradient id="flgB" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6B5010"/><stop offset="100%" stop-color="#4A3808"/></linearGradient>
+            </defs>
+            <rect x="1" y="1" width="44" height="44" fill="rgba(10,8,2,0.85)"/>
+            <rect x="1" y="1" width="44" height="44" stroke="url(#flgF)" stroke-width="1.8" fill="none"/>
+            <rect x="4" y="4" width="38" height="38" stroke="url(#flgF)" stroke-width="0.5" fill="none" opacity="0.35"/>
+            <path d="M 22,12 A 11,14 0 0 1 22,40 L 17,40 L 17,12 Z" fill="url(#flgB)"/>
+            <path d="M 15,6 A 11,14 0 0 1 15,34 L 10,34 L 10,6 Z" fill="url(#flgF)"/>
+          </svg>
+          <div>
+            <p style="font-family:var(--font-sans);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:3px;">Agence Immobilière</p>
+            <p style="font-family:var(--font-serif);font-size:18px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--or);">Desjardins</p>
+          </div>
+        </div>
+        <p class="footer-brand-tagline">Vernon · Normandie</p>
+        <p class="footer-brand-desc">Depuis plus de 30 ans, votre agence immobilière de confiance à Vernon. Entre Paris et Rouen, dans la vallée de la Seine.</p>
+        <div class="footer-social">
+          <a href="#" title="LinkedIn">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="#" title="Instagram">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" title="Facebook">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-col-title">Navigation</p>
+        <ul class="footer-col-links">
+          <li><a href="#vente">Vente</a></li>
+          <li><a href="#location">Location</a></li>
+          <li><a href="#estimation">Estimation gratuite</a></li>
+          <li><a href="#alerte">Alerte Email</a></li>
+          <li><a href="#agence">L'Agence</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Nos Biens par Ville</p>
+        <ul class="footer-col-links">
+          <li><a href="#vente">Maisons à vendre Vernon</a></li>
+          <li><a href="#vente">Appartements Vernon</a></li>
+          <li><a href="#vente">Biens à Gommecourt</a></li>
+          <li><a href="#vente">Biens à Saint-Marcel</a></li>
+          <li><a href="#vente">Biens à Pacy-sur-Eure</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Contact</p>
+        <ul class="footer-col-links">
+          <li><a href="tel:0189480917">01 89 48 09 17</a></li>
+          <li><a href="mailto:agence@desjardins.immo">agence@desjardins.immo</a></li>
+          <li><a href="#">15/17 Place Barette, 27200 Vernon</a></li>
+          <li><a href="#">Lun–Ven : 9h–19h</a></li>
+          <li><a href="#">Sam : 9h–12h</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2024 Agence des Jardins — SARL Desjardins Immobilier. Tous droits réservés. Carte pro n° CPI 2720182000012 — 27200 Vernon.</p>
+      <div class="footer-legal">
+        <a href="#">Mentions légales</a>
+        <a href="#">Politique de confidentialité</a>
+        <a href="#">CGU</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL FICHE BIEN -->
+<div class="listing-modal-overlay" id="listingModal" onclick="handleListingOverlay(event)">
+  <div class="listing-modal-box">
+    <div class="lm-gallery">
+      <img class="lm-gallery-main" id="lmImg" src="" alt="">
+      <button class="lm-gallery-nav lm-gallery-prev hidden" id="lmPrev" onclick="galleryNav(-1)">&#8249;</button>
+      <button class="lm-gallery-nav lm-gallery-next hidden" id="lmNext" onclick="galleryNav(1)">&#8250;</button>
+      <div class="lm-gallery-counter hidden" id="lmCounter"></div>
+    </div>
+    <div class="listing-modal-body">
+      <div class="listing-modal-header">
+        <div>
+          <p class="listing-modal-ref" id="lmRef"></p>
+          <h3 class="listing-modal-title" id="lmTitle"></h3>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+          <button class="listing-modal-close" onclick="closeListingModal()">✕</button>
+          <p class="listing-modal-price" id="lmPrice"></p>
+        </div>
+      </div>
+      <div class="listing-modal-specs" id="lmSpecs"></div>
+      <div class="lm-dpe" id="lmDpe"></div>
+      <div class="lm-invest-badge" id="lmInvest" style="display:none"></div>
+      <p class="listing-modal-desc" id="lmDesc"></p>
+      <div class="listing-modal-actions">
+        <a href="tel:0189480917" class="btn-primary">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.4 1.14 2 2 0 012.38 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          Appeler : 01 89 48 09 17
+        </a>
+        <a href="#contact" class="btn-secondary" onclick="closeListingModal()">Envoyer un message</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STICKY CTA -->
+<div class="sticky-cta" id="stickyCta" style="opacity:0;transition:opacity 0.3s ease;">
+  <a href="tel:0189480917" class="sticky-phone">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+    01 89 48 09 17
+  </a>
+  <button class="sticky-cta-main" onclick="openModal()">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    Assistant IA
+  </button>
+</div>
+
+<!-- MODAL AGENT IA -->
+<div class="modal-overlay" id="agentModal" onclick="handleOverlayClick(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <h3 class="modal-title">Assistant Immobilier IA</h3>
+        <p class="modal-subtitle">Disponible 24h/24 · 7j/7 · Réponse immédiate</p>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg">
+          <div class="chat-avatar">✦</div>
+          <div class="chat-bubble">Bonjour, je suis l'assistant immobilier de l'Agence des Jardins. Comment puis-je vous aider aujourd'hui ?</div>
+        </div>
+      </div>
+      <div class="chat-typing" id="chatTyping">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="chat-quick-replies" id="quickReplies">
+        <button class="quick-reply" onclick="sendQuickReply(this)">Acheter un bien</button>
+        <button class="quick-reply" onclick="sendQuickReply(this)">Vendre mon bien</button>
+        <button class="quick-reply" onclick="sendQuickReply(this)">Estimation gratuite</button>
+        <button class="quick-reply" onclick="sendQuickReply(this)">Prendre RDV</button>
+        <button class="quick-reply" onclick="sendQuickReply(this)">Location</button>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" class="form-input" id="chatInput" placeholder="Posez votre question..." onkeypress="handleChatKey(event)">
+        <button class="chat-send" onclick="sendChatMessage()">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// NAV SCROLL
+// ============================================================
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+  const stickyCta = document.getElementById('stickyCta');
+  stickyCta.style.opacity = window.scrollY > 400 ? '1' : '0';
+  stickyCta.style.pointerEvents = window.scrollY > 400 ? 'all' : 'none';
+});
+
+// ============================================================
+// MOBILE MENU
+// ============================================================
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+// ============================================================
+// REVEAL ON SCROLL
+// ============================================================
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ============================================================
+// LISTINGS FILTER
+// ============================================================
+function filterListings(btn, type) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.listing-card').forEach(card => {
+    const show = type === 'all' || card.dataset.type === type;
+    card.style.display = show ? '' : 'none';
+    if (type === 'all' || card.dataset.type !== 'vente') {
+      card.classList.remove('featured');
+    }
+  });
+  if (type === 'all') {
+    const first = document.querySelector('.listing-card');
+    if (first) first.classList.add('featured');
+  }
+}
+
+// ============================================================
+// FORM SUBMIT
+// ============================================================
+function handleSubmit(e, formType) {
+  e.preventDefault();
+  const btn = e.target.querySelector('[type="submit"]');
+  const original = btn.innerHTML;
+  btn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Envoyé — Nous vous contactons bientôt';
+  btn.style.background = '#2D7D46';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.innerHTML = original;
+    btn.style.background = '';
+    btn.disabled = false;
+    e.target.reset();
+  }, 4000);
+}
+
+// ============================================================
+// MODAL AGENT IA
+// ============================================================
+function openModal() {
+  document.getElementById('agentModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('chatInput').focus(), 300);
+}
+function closeModal() {
+  document.getElementById('agentModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('agentModal')) closeModal();
+}
+
+const responses = {
+  'acheter': "Excellente décision ! Pour vous aider à trouver le bien idéal, pouvez-vous me préciser votre budget approximatif et le secteur qui vous intéresse ? Nous avons des biens disponibles à Vernon, Saint-Marcel, Le Val d'Hazey et Gommecourt.",
+  'vendre': "Nous serons ravis de vous accompagner dans la vente de votre bien. L'Agence des Jardins dispose d'un réseau d'acquéreurs qualifiés actifs. Pour commencer, souhaitez-vous une estimation gratuite de votre bien ?",
+  'estimation': "Notre service d'estimation est gratuit et sans engagement. Un expert vous contactera sous 24h avec une évaluation précise basée sur les transactions récentes. Pouvez-vous me donner l'adresse approximative de votre bien et sa surface ?",
+  'rdv': "Je vais prendre note de votre demande. Nos conseillers sont disponibles du lundi au vendredi de 9h à 19h, et le samedi de 10h à 17h. Quel est votre numéro de téléphone pour qu'un expert vous rappelle rapidement ?",
+  'location': "Nous gérons des biens à la location sur Vernon et ses environs. Quel type de bien recherchez-vous — appartement ou maison ? Quel est votre budget mensuel approximatif ?",
+  'default': "Merci pour votre question. Un de nos conseillers immobiliers va prendre en charge votre demande. Pour une réponse immédiate, vous pouvez également nous appeler au 01 89 48 09 17. Avez-vous d'autres questions ?"
+};
+
+function getResponse(msg) {
+  const m = msg.toLowerCase();
+  if (m.includes('achet') || m.includes('acquér')) return responses['acheter'];
+  if (m.includes('vend') || m.includes('ceder')) return responses['vendre'];
+  if (m.includes('estim') || m.includes('valeur') || m.includes('prix')) return responses['estimation'];
+  if (m.includes('rdv') || m.includes('rendez') || m.includes('rencontr')) return responses['rdv'];
+  if (m.includes('locat') || m.includes('louer') || m.includes('location')) return responses['location'];
+  return responses['default'];
+}
+
+function addMessage(text, isUser) {
+  const msgs = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg' + (isUser ? ' user' : '');
+  div.innerHTML = `
+    <div class="chat-avatar">${isUser ? '👤' : '✦'}</div>
+    <div class="chat-bubble">${text}</div>
+  `;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  addMessage(msg, true);
+  document.getElementById('quickReplies').style.display = 'none';
+  const typing = document.getElementById('chatTyping');
+  typing.style.display = 'flex';
+  setTimeout(() => {
+    typing.style.display = 'none';
+    addMessage(getResponse(msg), false);
+  }, 1200 + Math.random() * 800);
+}
+
+function sendQuickReply(btn) {
+  const text = btn.textContent;
+  addMessage(text, true);
+  document.getElementById('quickReplies').style.display = 'none';
+  const typing = document.getElementById('chatTyping');
+  typing.style.display = 'flex';
+  setTimeout(() => {
+    typing.style.display = 'none';
+    addMessage(getResponse(text), false);
+  }, 1000 + Math.random() * 600);
+}
+
+function handleChatKey(e) {
+  if (e.key === 'Enter') sendChatMessage();
+}
+
+// Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeListingModal(); }
+  const lm = document.getElementById('listingModal');
+  if (lm && lm.classList.contains('active')) {
+    if (e.key === 'ArrowLeft')  galleryNav(-1);
+    if (e.key === 'ArrowRight') galleryNav(1);
+  }
+});
+
+// ============================================================
+// MODAL FICHES BIENS
+// ============================================================
+const propertiesData = {
+  'gommecourt': {
+    ref: 'Gommecourt · Réf. 171451768',
+    title: 'Corps de ferme — 4 Maisons',
+    price: '334 000 €',
+    imgs: Array.from({length:15},(_,i)=>`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/171451/171451768_${i+1}.jpg?1769478572`),
+    specs: [
+      {icon:'area', label:'216 m²'},
+      {icon:'home', label:'9 pièces'},
+      {icon:'bed',  label:'5 chambres'},
+      {icon:'tag',  label:'Corps de ferme'}
+    ],
+    invest: null,
+    dpe: {classe:'C', col:'#6BAF2A', ges:'A', gesCol:'#318B2E', cout:'750 – 1 080 €/an'},
+    desc: "Corps de ferme composé de 4 maisons, dont 2 à rénover. Idéal pour investisseur, activité de gîte ou grande famille. Chauffage PAC + gaz, DPE C. Situé à Gommecourt, secteur calme à 5 min de Vernon et 1h de Paris par l'A13. La propriété offre un ensemble exceptionnel sur terrain arboré — une opportunité rare dans la vallée de la Seine."
+  },
+  'valhazey': {
+    ref: 'Le Val d\'Hazey · Réf. 172196991',
+    title: 'Maison avec Cachet à Rénover',
+    price: '231 000 €',
+    imgs: Array.from({length:11},(_,i)=>`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/172196/172196991_${i+1}.jpg?1772199922`),
+    specs: [
+      {icon:'area', label:'115 m²'},
+      {icon:'home', label:'4 pièces'},
+      {icon:'bed',  label:'3 chambres'},
+      {icon:'tag',  label:'Maison · Terrain 428 m²'}
+    ],
+    invest: null,
+    dpe: {classe:'E', col:'#D07818', ges:'F', gesCol:'#C44010', cout:'~2 840 €/an'},
+    desc: "Maison à rénover avec beaucoup de cachet. Maison principale : entrée, séjour avec cheminée, cuisine, 3 chambres, salle de bains. Terrain de 428 m² clos. Idéal pour un projet de rénovation valorisant dans un village prisé de la vallée de la Seine, à 5 km de Vernon et à proximité immédiate de Giverny."
+  },
+  'saint-marcel': {
+    ref: 'Saint-Marcel · Réf. 172226570',
+    title: 'Appartement T3 — Investissement Locatif',
+    price: '127 000 €',
+    imgs: [`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/172226/172226570_1.jpg?1772416646`],
+    specs: [
+      {icon:'area', label:'62,95 m²'},
+      {icon:'home', label:'3 pièces'},
+      {icon:'bed',  label:'2 chambres'},
+      {icon:'tag',  label:'Appartement'}
+    ],
+    invest: {loyer:'578,92 €/mois', rendement:'Rendement locatif attractif'},
+    dpe: {classe:'D', col:'#C4A800', ges:'D', gesCol:'#C4A800', cout:'920 – 1 300 €/an'},
+    desc: "Saint-Marcel — Investissement locatif. Appartement T3 de 62,95 m² vendu loué, idéal investisseur. Proche toutes commodités. Lumineux séjour, cuisine indépendante, 2 chambres, salle de bains. Copropriété bien entretenue, charges raisonnables. À deux pas de Vernon, des commerces, des écoles et de la gare SNCF."
+  },
+  'vernon-t2a': {
+    ref: 'Vernon · Réf. 172226571',
+    title: 'Appartement T2 — Vendu Loué',
+    price: '105 000 €',
+    imgs: Array.from({length:4},(_,i)=>`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/172226/172226571_${i+1}.jpg?1772416648`),
+    specs: [
+      {icon:'area', label:'42,32 m²'},
+      {icon:'home', label:'2 pièces'},
+      {icon:'bed',  label:'1 chambre'},
+      {icon:'tag',  label:'Appartement'}
+    ],
+    invest: {loyer:'489,71 €/mois', rendement:'Vendu occupé — locataire en place'},
+    dpe: {classe:'E', col:'#D07818', ges:'B', gesCol:'#51A43A', cout:'1 040 – 1 450 €/an'},
+    desc: "Appartement T2 de 42,32 m² à Vernon, vendu loué avec locataire en place. Pièce de vie lumineuse, cuisine, chambre, salle de bains. Cave. Bâtiment bien entretenu, faibles charges. À pied de tous les commerces et de la gare SNCF Vernon–Giverny. Investissement clé en main avec revenu locatif immédiat."
+  },
+  'vernon-t3': {
+    ref: 'Vernon · Réf. 172757442',
+    title: 'Appartement T3 — Vendu Loué',
+    price: '155 000 €',
+    imgs: Array.from({length:5},(_,i)=>`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/172757/172757442_${i+1}.jpg?1776210318`),
+    specs: [
+      {icon:'area', label:'63,6 m²'},
+      {icon:'home', label:'3 pièces'},
+      {icon:'bed',  label:'2 chambres'},
+      {icon:'tag',  label:'Appartement'}
+    ],
+    invest: {loyer:'768,50 €/mois', rendement:'Rendement brut 5,94 %'},
+    dpe: {classe:'D', col:'#C4A800', ges:'B', gesCol:'#51A43A', cout:'1 530 – 2 100 €/an'},
+    desc: "Appartement T3 de 63,6 m² à Vernon, vendu loué avec locataire en place. Séjour lumineux, cuisine indépendante, 2 chambres, salle de bains. Cave et parking inclus. Rendement brut de 5,94 % — investissement performant dans une ville dynamique à 1h10 de Paris Saint-Lazare. Charges de copropriété maîtrisées."
+  },
+  'vernon-t2b': {
+    ref: 'Vernon · Réf. 172866627',
+    title: 'Appartement T2 avec Jardin',
+    price: '125 000 €',
+    imgs: Array.from({length:5},(_,i)=>`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/172866/172866627_${i+1}.jpg?1776949218`),
+    specs: [
+      {icon:'area', label:'46,4 m²'},
+      {icon:'home', label:'2 pièces'},
+      {icon:'bed',  label:'1 chambre'},
+      {icon:'tag',  label:'Appartement · Jardin privatif'}
+    ],
+    invest: null,
+    dpe: {classe:'D', col:'#C4A800', ges:'B', gesCol:'#51A43A', cout:'1 130 – 1 580 €/an'},
+    desc: "Appartement T2 de 46,4 m² avec jardin privatif à Vernon. Séjour avec cuisine aménagée, chambre, salle d'eau. Jardin clos — rare pour ce type de bien. Place de parking. Bonne isolation, DPE performant. Charges très modérées. À proximité immédiate des écoles, commerces et de la gare. Idéal pour habiter ou investir."
+  },
+  /* ---- LOCATION ---- */
+  'loc-parking': {
+    ref: 'Vernon · Réf. 172226575',
+    title: 'Place de Stationnement Extérieure',
+    price: '50 €/mois',
+    imgs: [`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/172226/172226575_1.jpg?1772416658`],
+    specs: [
+      {icon:'tag', label:'Parking / Box'},
+      {icon:'area', label:'Vernon'}
+    ],
+    invest: null,
+    dpe: null,
+    desc: "PROCHE COMMERCE — Place de stationnement extérieur sécurisé. Place n°188. Idéal pour compléter une location ou pour garer votre véhicule en toute sécurité au cœur de Vernon, à proximité immédiate des commerces et services."
+  },
+  'loc-studio': {
+    ref: 'Vernon · Réf. 172886252',
+    title: 'Studio Meublé Rénové',
+    price: '550 €/mois',
+    imgs: Array.from({length:4},(_,i)=>`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/172886/172886252_${i+1}.jpg?1777079899`),
+    specs: [
+      {icon:'area', label:'19,45 m²'},
+      {icon:'home', label:'1 pièce'},
+      {icon:'tag',  label:'Studio meublé'}
+    ],
+    invest: null,
+    dpe: null,
+    desc: "Studio meublé et entièrement rénové comprenant une pièce principale avec kitchenette et salle d'eau/WC. À 5 minutes du centre-ville de Vernon. Idéal pour un étudiant ou un jeune actif souhaitant s'installer rapidement dans un logement confortable, prêt à vivre."
+  },
+  'loc-t2-4138': {
+    ref: 'Vernon · Réf. 172886251',
+    title: 'Appartement T2 — 41,38 m²',
+    price: '585 €/mois',
+    imgs: Array.from({length:4},(_,i)=>`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/172886/172886251_${i+1}.jpg?1777079897`),
+    specs: [
+      {icon:'area', label:'41,38 m²'},
+      {icon:'home', label:'2 pièces'},
+      {icon:'bed',  label:'1 chambre'},
+      {icon:'tag',  label:'Appartement'}
+    ],
+    invest: null,
+    dpe: null,
+    desc: "Appartement au 1er étage d'un immeuble mono-propriétaire sans ascenseur, avec entrée directe. Cuisine équipée, salle de bain/WC, chambre et cave privative. Disponible à partir du 16 juillet 2026. Bâtiment bien entretenu, charges raisonnables. À deux pas des commerces et de la gare SNCF de Vernon."
+  },
+  'loc-t2-4601': {
+    ref: 'Vernon · Réf. 172528741',
+    title: 'Appartement T2 — Proche Gare',
+    price: '630 €/mois',
+    imgs: Array.from({length:6},(_,i)=>`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/172528/172528741_${i+1}.jpg?1774575921`),
+    specs: [
+      {icon:'area', label:'46,01 m²'},
+      {icon:'home', label:'2 pièces'},
+      {icon:'bed',  label:'1 chambre'},
+      {icon:'tag',  label:'Appartement · Balcon'}
+    ],
+    invest: null,
+    dpe: null,
+    desc: "VERNON — PROCHE GARE SNCF. T2 au 2ème étage, entrée, séjour avec balcon, kitchenette, WC séparé, salle de bain, chambre et parking en cour commune. Idéal pour les navetteurs Paris–Vernon. Lumineux, bien situé, à quelques minutes à pied de la gare et du centre-ville."
+  },
+  'loc-t2bis': {
+    ref: 'Vernon · Réf. 171602868',
+    title: 'T2 bis — Centre Piétonnier',
+    price: '640 €/mois',
+    imgs: Array.from({length:4},(_,i)=>`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/171602/171602868_${i+1}.jpg?1771556247`),
+    specs: [
+      {icon:'area', label:'41,77 m²'},
+      {icon:'home', label:'3 pièces'},
+      {icon:'bed',  label:'1 chambre'},
+      {icon:'tag',  label:'Appartement'}
+    ],
+    invest: null,
+    dpe: null,
+    desc: "T2 bis situé au cœur du centre piétonnier historique de Vernon, 3ème étage. Hall d'entrée, séjour avec kitchenette, salon, chambre, salle de bain, WC séparé. Chauffage PAC économique. Disponible immédiatement. Adresse de prestige en plein centre-ville, accès à pied à tous les commerces et restaurants."
+  },
+  'loc-t2-duplex': {
+    ref: 'Vernon · Réf. 171389023',
+    title: 'T2 Duplex Meublé',
+    price: '650 €/mois',
+    imgs: Array.from({length:7},(_,i)=>`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/171389/171389023_${i+1}.jpg?1769478537`),
+    specs: [
+      {icon:'area', label:'39,29 m²'},
+      {icon:'home', label:'2 pièces'},
+      {icon:'bed',  label:'1 chambre'},
+      {icon:'tag',  label:'Duplex meublé'}
+    ],
+    invest: null,
+    dpe: null,
+    desc: "T2 Duplex meublé : entrée directe séjour/salon, coin cuisine aménagée (hotte, plaque, micro-ondes, réfrigérateur), placard, salle d'eau/WC. À l'étage : grande chambre avec espace dressing. Logement fonctionnel et chaleureux, idéal pour une installation rapide. Disponible immédiatement."
+  },
+  'loc-t2-4022': {
+    ref: 'Vernon · Réf. 172497348',
+    title: 'Appartement T2 — Immeuble Sécurisé',
+    price: '660 €/mois',
+    imgs: Array.from({length:5},(_,i)=>`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/172497/172497348_${i+1}.jpg?1774362260`),
+    specs: [
+      {icon:'area', label:'40,22 m²'},
+      {icon:'home', label:'2 pièces'},
+      {icon:'bed',  label:'1 chambre'},
+      {icon:'tag',  label:'Appartement · Box parking'}
+    ],
+    invest: null,
+    dpe: null,
+    desc: "T2 au 1er étage d'un immeuble sécurisé avec ascenseur. Entrée avec 2 grands placards, salle de bain/WC, séjour avec kitchenette semi-équipée, chambre, cave privative et box parking fermé en sous-sol. Assurance loyers impayés disponible. Copropriété bien gérée, charges modérées."
+  },
+  'loc-t23': {
+    ref: 'Vernon · Réf. 171675895',
+    title: 'Appartement T2/3 sur Deux Niveaux',
+    price: '720 €/mois',
+    imgs: Array.from({length:6},(_,i)=>`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/171675/171675895_${i+1}.jpg?1773796341`),
+    specs: [
+      {icon:'area', label:'44,85 m²'},
+      {icon:'home', label:'3 pièces'},
+      {icon:'bed',  label:'2 chambres'},
+      {icon:'tag',  label:'Appartement duplex'}
+    ],
+    invest: null,
+    dpe: null,
+    desc: "T2/3 sur deux niveaux, à 5 minutes du centre-ville de Vernon. Rez-de-chaussée : séjour, chambre, cuisine semi-équipée, salle de bain. Étage : chambre sous combles. Logement atypique et plein de caractère, idéal pour une famille ou un couple cherchant de l'espace et du charme."
+  },
+  'loc-maison-t4': {
+    ref: 'Vernon · Réf. 172004164',
+    title: 'Maison de Ville T4 avec Jardin',
+    price: '874 €/mois',
+    imgs: Array.from({length:9},(_,i)=>`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/172004/172004164_${i+1}.jpg?1770857842`),
+    specs: [
+      {icon:'area', label:'88,96 m²'},
+      {icon:'home', label:'4 pièces'},
+      {icon:'bed',  label:'3 chambres'},
+      {icon:'tag',  label:'Maison · Jardin ~200 m²'}
+    ],
+    invest: null,
+    dpe: null,
+    desc: "À 5 minutes à pied du centre-ville de Vernon. Maison de ville : entrée, séjour avec cheminée décorative, cuisine aménagée, pièce annexe, WC. Étage : 2 chambres, salle de bain. 2ème étage : combles aménagés en bureau/chambre. Terrasse, cave, jardin d'environ 200 m² et dépendance. Rare sur le marché locatif vernonais."
+  },
+  'loc-t4': {
+    ref: 'Vernon · Réf. 172721884',
+    title: 'Appartement T4 — Hyper Centre',
+    price: '890 €/mois',
+    imgs: Array.from({length:9},(_,i)=>`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/172721/172721884_${i+1}.jpg?1775959409`),
+    specs: [
+      {icon:'area', label:'72,53 m²'},
+      {icon:'home', label:'4 pièces'},
+      {icon:'bed',  label:'3 chambres'},
+      {icon:'tag',  label:'Appartement · Balcon'}
+    ],
+    invest: null,
+    dpe: null,
+    desc: "Vernon Hyper centre-ville. T4 au 1er étage : entrée/placard, séjour avec balcon, cuisine semi-équipée rénovée avec balcon, couloir, 3 chambres, salle de bain, WC séparé et cave privative. Grand appartement familial idéalement placé, à quelques pas de toutes les commodités du centre de Vernon."
+  },
+  'loc-commercial': {
+    ref: 'Vernon · Réf. 172226574',
+    title: 'Local Commercial — 242 m²',
+    price: '2 650 €/mois',
+    imgs: Array.from({length:5},(_,i)=>`https://medias.consortium-immobilier.fr/photos_immo_formats/902_678/172226/172226574_${i+1}.jpg?1772416657`),
+    specs: [
+      {icon:'area', label:'242 m²'},
+      {icon:'tag',  label:'Local commercial'},
+      {icon:'home', label:'Vernon · Centre / Hôpital'}
+    ],
+    invest: null,
+    dpe: null,
+    desc: "Local commercial situé en centre-ville de Vernon, à proximité de l'hôpital. Environ 125 m² comprenant : véranda d'accueil, espace vente, sanitaires, bars, bureau + 117 m² comprenant : fourneaux, réserve, sanitaires avec douches, vestiaires. Garage et dépendance inclus. Travaux à prévoir. Toutes activités acceptées sauf restauration rapide."
+  }
+};
+
+const specIcons = {
+  area: '<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>',
+  home: '<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>',
+  bed:  '<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>',
+  tag:  '<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>'
+};
+
+let _galleryImgs = [];
+let _galleryIdx  = 0;
+
+function updateGalleryImg() {
+  const img     = document.getElementById('lmImg');
+  const prev    = document.getElementById('lmPrev');
+  const next    = document.getElementById('lmNext');
+  const counter = document.getElementById('lmCounter');
+  const multi   = _galleryImgs.length > 1;
+  img.src = _galleryImgs[_galleryIdx];
+  counter.textContent = multi ? `${_galleryIdx + 1} / ${_galleryImgs.length}` : '';
+  prev.classList.toggle('hidden', !multi);
+  next.classList.toggle('hidden', !multi);
+  counter.classList.toggle('hidden', !multi);
+}
+
+function galleryNav(dir) {
+  _galleryIdx = (_galleryIdx + dir + _galleryImgs.length) % _galleryImgs.length;
+  updateGalleryImg();
+}
+
+function openListingModal(id) {
+  const p = propertiesData[id];
+  if (!p) return;
+  _galleryImgs = p.imgs;
+  _galleryIdx  = 0;
+  updateGalleryImg();
+  document.getElementById('lmImg').alt   = p.title;
+  document.getElementById('lmRef').textContent   = p.ref;
+  document.getElementById('lmTitle').textContent = p.title;
+  document.getElementById('lmPrice').textContent = p.price;
+  document.getElementById('lmDesc').textContent  = p.desc;
+  document.getElementById('lmSpecs').innerHTML   = p.specs
+    .map(s => `<div class="listing-modal-spec">${specIcons[s.icon]}<span>${s.label}</span></div>`)
+    .join('');
+  // DPE
+  if (p.dpe) {
+    document.getElementById('lmDpe').style.display = 'flex';
+    document.getElementById('lmDpe').innerHTML = `
+      <div class="lm-dpe-block">
+        <div class="lm-dpe-letter" style="background:${p.dpe.col}">${p.dpe.classe}</div>
+        <div class="lm-dpe-info">
+          <span class="lm-dpe-label">Énergie</span>
+          <span class="lm-dpe-value">Classe ${p.dpe.classe}</span>
+        </div>
+      </div>
+      <div class="lm-dpe-sep"></div>
+      <div class="lm-dpe-block">
+        <div class="lm-dpe-letter" style="background:${p.dpe.gesCol}">${p.dpe.ges}</div>
+        <div class="lm-dpe-info">
+          <span class="lm-dpe-label">Émissions GES</span>
+          <span class="lm-dpe-value">Classe ${p.dpe.ges}</span>
+        </div>
+      </div>
+      <div class="lm-dpe-cost">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        ${p.dpe.cout}
+      </div>`;
+  } else {
+    document.getElementById('lmDpe').style.display = 'none';
+  }
+  // Investissement
+  const inv = document.getElementById('lmInvest');
+  if (p.invest) {
+    inv.innerHTML = `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><strong>${p.invest.loyer}</strong><span style="color:rgba(255,255,255,0.5)">·</span><span>${p.invest.rendement}</span>`;
+    inv.style.display = 'flex';
+  } else {
+    inv.style.display = 'none';
+  }
+  const modal = document.getElementById('listingModal');
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeListingModal() {
+  document.getElementById('listingModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+function handleListingOverlay(e) {
+  if (e.target === document.getElementById('listingModal')) closeListingModal();
+}
+</script>
+
+<!-- Retell Web SDK -->
+<script src="https://cdn.jsdelivr.net/npm/retell-client-js-sdk@latest/dist/index.umd.js"></script>
+<script>
+/* ============================================================
+   AGENT VOCAL IA — RETELL WEB CALL
+   ============================================================ */
+const RETELL_BACKEND = 'https://prospexx-lead-gen.onrender.com/retell/web-call';
+
+let retellClient = null;
+let voiceCallActive = false;
+
+function setCallUI(state) {
+  const btn       = document.getElementById('voiceCallBtn');
+  const btnLabel  = document.getElementById('voiceCallBtnLabel');
+  const orb       = document.getElementById('orbCenter');
+  const orbLabel  = document.getElementById('orbLabel');
+  const status    = document.getElementById('voiceStatus');
+  const statusTxt = document.getElementById('voiceStatusText');
+
+  if (state === 'connecting') {
+    btn.classList.add('calling');
+    btnLabel.textContent = 'Connexion…';
+    btn.disabled = true;
+    orb.classList.add('calling');
+    orbLabel.textContent = 'Connexion…';
+    status.style.display = 'flex';
+    statusTxt.textContent = 'Connexion en cours…';
+  } else if (state === 'active') {
+    btnLabel.textContent = 'Raccrocher';
+    btn.disabled = false;
+    orbLabel.textContent = 'En ligne';
+    statusTxt.textContent = 'Agent IA en ligne · Parlez maintenant';
+  } else {
+    btn.classList.remove('calling');
+    btnLabel.textContent = 'Appeler l\'Agent IA';
+    btn.disabled = false;
+    orb.classList.remove('calling');
+    orbLabel.textContent = 'Appeler';
+    status.style.display = 'none';
+    voiceCallActive = false;
+  }
+}
+
+async function startVoiceCall() {
+  if (voiceCallActive) {
+    endVoiceCall();
+    return;
+  }
+
+  setCallUI('connecting');
+  voiceCallActive = true;
+
+  try {
+    // Obtenir le token d'accès depuis notre backend
+    const res = await fetch(RETELL_BACKEND, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    if (!res.ok) throw new Error('Impossible de joindre le serveur (' + res.status + ')');
+    const { access_token } = await res.json();
+    if (!access_token) throw new Error('Token manquant');
+
+    // Initialiser le client Retell
+    const RetellWebClient = (window.RetellWebClient) || (window.retellClientJsSdk && window.retellClientJsSdk.RetellWebClient);
+    if (!RetellWebClient) throw new Error('SDK Retell non chargé');
+    retellClient = new RetellWebClient();
+
+    retellClient.on('call_started', () => setCallUI('active'));
+    retellClient.on('call_ended',   () => setCallUI('idle'));
+    retellClient.on('error',        (e) => { console.error('[Retell]', e); setCallUI('idle'); });
+
+    await retellClient.startCall({ accessToken: access_token });
+
+  } catch (err) {
+    console.error('[Voice call]', err.message);
+    setCallUI('idle');
+    // Fallback : proposer le numéro de téléphone
+    alert('Appel navigateur indisponible. Appelez directement le 01 89 48 09 17.');
+  }
+}
+
+function endVoiceCall() {
+  if (retellClient) {
+    try { retellClient.stopCall(); } catch(e) {}
+    retellClient = null;
+  }
+  setCallUI('idle');
+}
+
+// Raccrocher si l'utilisateur quitte la page
+window.addEventListener('beforeunload', () => {
+  if (retellClient) try { retellClient.stopCall(); } catch(e) {}
+});
+</script>
+
+<!-- ── Simulateur Crédit Immobilier ─────────────────────────────── -->
+<style>
+/* ── Simulateur aux couleurs Agence des Jardins ── */
+#simulateur-widget .siw-wrap {
+  --primary: #C9A028;
+  --primary-dark: #7A5C0A;
+  --purple: #EDD060;
+  --success: #C9A028;
+  --warning: #EDD060;
+  --danger: #ef4444;
+  --gray-50: #161616;
+  --gray-100: #1e1e1e;
+  --gray-200: #2a2a2a;
+  --gray-300: #3a3a3a;
+  --gray-400: #888888;
+  --gray-500: #aaaaaa;
+  --gray-600: #cccccc;
+  --gray-700: #e0e0e0;
+  --gray-800: #f0f0f0;
+  --gray-900: #ffffff;
+  --white: #111111;
+  --shadow: 0 4px 24px rgba(0,0,0,0.5);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.6);
+  background: #111111;
+  border: 1px solid #2a2a2a;
+}
+#simulateur-widget .siw-header {
+  background: linear-gradient(
+    90deg,
+    #5C4008 0%,
+    #8B6514 18%,
+    #C9A028 35%,
+    #EDD060 46%,
+    #FFF8E0 50%,
+    #EDD060 54%,
+    #C9A028 65%,
+    #8B6514 82%,
+    #5C4008 100%
+  );
+  background-size: 250% auto;
+  animation: shimmer-btn 22s linear infinite;
+  border-bottom: none;
+}
+#simulateur-widget .siw-header .siw-logo,
+#simulateur-widget .siw-header .siw-title,
+#simulateur-widget .siw-header .siw-subtitle,
+#simulateur-widget .siw-header .siw-step-label {
+  color: #0A0A0A !important;
+}
+#simulateur-widget .siw-header .siw-close {
+  background: rgba(0,0,0,0.15) !important;
+  color: #0A0A0A !important;
+}
+#simulateur-widget .siw-header .siw-close:hover {
+  background: rgba(0,0,0,0.28) !important;
+}
+#simulateur-widget .siw-progress-track { background: rgba(0,0,0,0.2); }
+#simulateur-widget .siw-progress-bar { background: #0A0A0A; }
+#simulateur-widget .siw-dot { background: rgba(0,0,0,0.2); }
+#simulateur-widget .siw-dot.active { background: #0A0A0A; width: 24px; }
+#simulateur-widget .siw-dot.done { background: rgba(0,0,0,0.4); }
+#simulateur-widget .siw-progress-track { background: rgba(201,160,40,0.2); }
+#simulateur-widget .siw-progress-bar { background: #C9A028; }
+#simulateur-widget .siw-dot { background: rgba(201,160,40,0.3); }
+#simulateur-widget .siw-dot.active { background: #C9A028; }
+#simulateur-widget .siw-dot.done { background: rgba(201,160,40,0.7); }
+
+#simulateur-widget .siw-result-main {
+  background: linear-gradient(135deg, #1a1200 0%, #2a1f00 100%);
+  border: 1px solid #C9A028;
+}
+#simulateur-widget .siw-btn-next,
+#simulateur-widget .siw-btn-cta {
+  background: linear-gradient(135deg, #C9A028, #EDD060);
+  color: #0A0A0A;
+  box-shadow: 0 4px 14px rgba(201,160,40,0.35);
+}
+#simulateur-widget .siw-btn-next:hover,
+#simulateur-widget .siw-btn-cta:hover {
+  box-shadow: 0 6px 20px rgba(201,160,40,0.5);
+}
+#simulateur-widget .siw-btn-back {
+  background: #1e1e1e;
+  color: #aaaaaa;
+  border: 1px solid #2a2a2a;
+}
+#simulateur-widget .siw-btn-recall {
+  background: transparent;
+  color: #C9A028;
+  border-color: #C9A028;
+}
+#simulateur-widget .siw-btn-recall:hover { background: #1a1200; }
+#simulateur-widget .siw-range::-webkit-slider-runnable-track {
+  background: linear-gradient(to right, #C9A028 0%, #C9A028 var(--pct, 50%), #2a2a2a var(--pct, 50%), #2a2a2a 100%);
+}
+#simulateur-widget .siw-range::-webkit-slider-thumb { border-color: #C9A028; }
+#simulateur-widget .siw-duration-card { border-color: #2a2a2a; background: #161616; color: #e0e0e0; }
+#simulateur-widget .siw-duration-card:hover,
+#simulateur-widget .siw-duration-card.selected { border-color: #C9A028; background: #1a1200; }
+#simulateur-widget .siw-duration-card .siw-years { color: #C9A028; }
+#simulateur-widget .siw-gauge-wrap { background: #161616; border-color: #2a2a2a; }
+#simulateur-widget .siw-gauge-bar-track { background: #2a2a2a; }
+#simulateur-widget .siw-gauge-bar-fill.green { background: linear-gradient(90deg, #C9A028, #EDD060); }
+#simulateur-widget .siw-gauge-pct { color: #C9A028 !important; }
+#simulateur-widget .siw-result-card { background: #161616; border-color: #2a2a2a; }
+#simulateur-widget .siw-result-card-value { color: #ffffff; }
+#simulateur-widget .siw-result-card-value.green { color: #C9A028; }
+#simulateur-widget .siw-result-card-value.orange { color: #EDD060; }
+#simulateur-widget .siw-scenario { border-color: #2a2a2a; background: #161616; color: #e0e0e0; }
+#simulateur-widget .siw-scenario.active { border-color: #C9A028; background: #1a1200; }
+#simulateur-widget .siw-tip { background: #161616; border-left-color: #C9A028; }
+#simulateur-widget .siw-tip-text { color: #cccccc; }
+#simulateur-widget .siw-badge.green { background: #1a1200; color: #EDD060; }
+#simulateur-widget .siw-badge.blue { background: #1a1200; color: #C9A028; }
+#simulateur-widget .siw-badge.orange { background: #1e1600; color: #EDD060; }
+#simulateur-widget .siw-lead-summary { background: #161616; border-color: #C9A028; }
+#simulateur-widget .siw-lead-summary-title { color: #C9A028; }
+#simulateur-widget .siw-input { background: #161616; border-color: #2a2a2a; color: #ffffff; }
+#simulateur-widget .siw-input:focus { border-color: #C9A028; }
+#simulateur-widget .siw-input::placeholder { color: #555555; }
+#simulateur-widget .siw-success-details { background: #161616; }
+#simulateur-widget .siw-success-detail { border-bottom-color: #2a2a2a; }
+#simulateur-widget .siw-field label { color: #cccccc; }
+#simulateur-widget .siw-field label span { color: #C9A028; }
+#simulateur-widget .siw-step-title { color: #ffffff; }
+#simulateur-widget .siw-step-desc { color: #888888; }
+#simulateur-widget .siw-range-hints { color: #555555; }
+#simulateur-widget .siw-privacy { color: #555555; }
+#simulateur-widget .siw-check-item { color: #aaaaaa; }
+#simulateur-widget .siw-checklist-title { color: #cccccc; }
+#simulateur-widget .siw-float-btn { background: linear-gradient(135deg, #C9A028, #EDD060); color: #0A0A0A; }
+</style>
+<script src="simulateur-widget.js"></script>
+<script>
+
+function initSimulateur() {
+  if (!window.SimulateurImmo) { setTimeout(initSimulateur, 200); return; }
+
+  new SimulateurImmo({
+    container: '#simulateur-widget',
+    mode: 'inline',
+    agencyName: "Agence des Jardins",
+    agencyPhone: '0189480917',
+    webhookUrl: 'https://receptia.onrender.com/simulateur/lead',
+
+    onLeadCaptured: function(data) {
+      console.log('[Simulateur] Lead capturé :', data);
+      // Ping ntfy patron
+      fetch('https://ntfy.sh/agence-leads', {
+        method: 'POST',
+        headers: {
+          'Title': data.highIntent ? '🔥 Lead simulateur CHAUD' : '📊 Lead simulateur',
+          'Priority': data.highIntent ? 'high' : 'default',
+          'Tags': 'chart_increasing,house',
+          'Content-Type': 'text/plain; charset=utf-8',
+        },
+        body: [
+          '📊 Simulateur Crédit — ' + (data.highIntent ? 'CHAUD 🔥' : 'Standard'),
+          '👤 ' + data.name + ' | 📞 ' + data.phone,
+          '💰 Mensualité : ' + data.monthly + ' €/mois',
+          '🏠 Prix bien : ' + new Intl.NumberFormat('fr-FR').format(data.price) + ' €',
+          '⏱ Durée : ' + data.years + ' ans | Taux : ' + data.annualRate + ' %',
+          '🎯 Score acheteur : ' + data.score + ' / 100',
+        ].join('\n')
+      }).catch(() => {});
+    },
+
+    onHighIntentDetected: function(data) {
+      console.log('[Simulateur] Lead chaud détecté, score :', data.score);
+    },
+
+    onSimulationCompleted: function(data) {
+      // Optionnel : analytics
+    },
+
+    onRecallRequested: function(data) {
+      window.location.href = 'tel:0189480917';
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(initSimulateur, 300);
+});
+</script>
+</body>
+</html>
