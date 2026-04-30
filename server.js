@@ -735,16 +735,15 @@ app.post('/retell/webhook', express.json(), async (req, res) => {
     // call_ended = fallback si call_analyzed n'est pas configuré
     if (event !== 'call_analyzed' && event !== 'call_ended') return;
 
+    const fromNumber  = call.from_number  || call.from || '';
+    const transcript  = call.transcript   || '';
+    const analysis    = call.call_analysis || {};
+
     // Si call_ended arrive sans résumé → attendre call_analyzed
-    const analysis = call.call_analysis || {};
     if (event === 'call_ended' && !analysis.call_summary) {
       console.log('[Retell Webhook] call_ended sans résumé, on attend call_analyzed');
       return;
     }
-
-    const fromNumber  = call.from_number  || call.from || '';
-    const transcript  = call.transcript   || '';
-    const analysis    = call.call_analysis || {};
     const summary     = analysis.call_summary || 'Résumé non disponible';
     const sentiment   = analysis.user_sentiment || 'inconnu';
     const duration    = call.end_timestamp && call.start_timestamp
