@@ -729,21 +729,53 @@ app.post('/retell/webhook', express.json(), async (req, res) => {
       ? Math.round((call.end_timestamp - call.start_timestamp) / 1000) + 's'
       : '';
 
-    // Score détecté dans le résumé
-    let score = 'FROID';
-    if (/chaud|rendez-vous|rdv|urgent|imm[eé]diat|sign/i.test(summary + transcript)) score = 'CHAUD';
-    else if (/ti[eè]de|r[eé]flexion|mois|semaine|peut-[eê]tre/i.test(summary + transcript)) score = 'TIÈDE';
+    const fullText = (summary + ' ' + transcript).toLowerCase();
 
-    const ntfyTopic = 'agence-leads';
+    // ── Détection du type de besoin ──────────────────────────────────────
+    const isVisite     = /visite|visiter|voir le bien|voir l.appart|voir la maison/i.test(fullText);
+    const isEstimation = /estimat|valeur|prix de (mon|ma|notre)|combien vaut|évaluat/i.test(fullText);
+    const isVente      = /vendre|mise en vente|mandat de vente|vente de (mon|ma|notre)/i.test(fullText);
+    const isLocation   = /louer|location|trouver un logement|cherche un appart|cherche une maison/i.test(fullText);
+    const hasRDV       = /rendez-vous|rdv|convenu|confirm|planifi|fix[eé] le|prévu le/i.test(fullText);
+
+    const dateMatch = (summary + ' ' + transcript).match(/\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)\b.*?\b(\d{1,2}h\d{0,2}|\d{1,2}:\d{2})/i);
+    const rdvDateTime = dateMatch ? `${dateMatch[1]} à ${dateMatch[2]}` : null;
+
+    // ── Score ──────────────────────────────────────────────────────────────
+    let score = 'FROID';
+    if (hasRDV || /urgent|imm[eé]diat|sign/i.test(fullText)) score = 'CHAUD';
+    else if (/ti[eè]de|r[eé]flexion|mois|semaine|peut-[eê]tre/i.test(fullText)) score = 'TIÈDE';
+
+    const ntfyTopic  = 'agence-leads';
     const scoreEmoji = score === 'CHAUD' ? '🔥' : score === 'TIÈDE' ? '🌡️' : '❄️';
+
+    // ── Label du besoin ───────────────────────────────────────────────────
+    const besoinLabel = isEstimation ? '📐 Estimation'
+      : isVente       ? '🏷️ Vente'
+      : isVisite      ? '🚪 Visite'
+      : isLocation    ? '🔑 Location'
+      : '💬 Renseignement';
+
+    // ── Ligne RDV ─────────────────────────────────────────────────────────
+    const rdvLine = hasRDV
+      ? `📅 RDV${rdvDateTime ? ` : ${rdvDateTime}` : ' : confirmé (date à préciser)'}`
+      : `📅 Pas de RDV pris`;
+
+    // ── Score clair ───────────────────────────────────────────────────────
+    const scoreLine = score === 'CHAUD'
+      ? `${scoreEmoji} CHAUD — lead à rappeler en priorité`
+      : score === 'TIÈDE'
+      ? `${scoreEmoji} TIÈDE — intéressé mais pas encore décidé`
+      : `${scoreEmoji} FROID — simple renseignement, pas urgent`;
 
     // ── 1. NTFY → patron ──────────────────────────────────────────────────
     const ntfyMsg = [
       `${scoreEmoji} Appel Agence des Jardins`,
-      `📞 Appelant : ${fromNumber || 'inconnu'}`,
-      `⏱ Durée : ${duration}`,
-      `😊 Sentiment : ${sentiment}`,
-      `🎯 Score : ${score}`,
+      `📞 ${fromNumber || 'inconnu'} | ⏱ ${duration} | 😊 ${sentiment}`,
+      ``,
+      besoinLabel,
+      rdvLine,
+      scoreLine,
       ``,
       `📋 Résumé :`,
       summary,
@@ -753,7 +785,7 @@ app.post('/retell/webhook', express.json(), async (req, res) => {
       method: 'POST',
       headers: {
         'Content-Type': 'text/plain; charset=utf-8',
-        'Title': `${scoreEmoji} Lead immobilier — ${score}`,
+        'Title': `${scoreEmoji} ${besoinLabel.replace(/^\S+\s/, '')} — ${score}${rdvDateTime ? ' | ' + rdvDateTime : ''}`,
         'Priority': score === 'CHAUD' ? 'high' : 'default',
         'Tags': 'house,phone',
       },
@@ -762,20 +794,8 @@ app.post('/retell/webhook', express.json(), async (req, res) => {
       .catch(e => console.error('[ntfy] Erreur:', e.message));
 
     // ── 2. SMS Brevo → client appelant ────────────────────────────────────
+    // (isVisite, isEstimation, isVente, isLocation, hasRDV, rdvDateTime déjà définis plus haut)
     if (fromNumber && fromNumber !== 'unknown') {
-      const txt = (summary + ' ' + transcript).toLowerCase();
-
-      // Détecter le type de besoin
-      const isVisite      = /visite|visiter|voir le bien|voir l.appart|voir la maison/i.test(txt);
-      const isEstimation  = /estimat|valeur|prix de (mon|ma|notre)|combien vaut|évaluat/i.test(txt);
-      const isVente       = /vendre|mise en vente|mandat de vente|vente de (mon|ma|notre)/i.test(txt);
-      const isLocation    = /louer|location|trouver un logement|cherche un appart|cherche une maison/i.test(txt);
-      const hasRDV        = /rendez-vous|rdv|convenu|confirm|planifi|fix[eé] le|prévu le/i.test(txt);
-
-      // Extraire date/heure si mentionnée
-      const dateMatch = (summary + ' ' + transcript).match(/\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)\b.*?\b(\d{1,2}h\d{0,2}|\d{1,2}:\d{2})/i);
-      const rdvDateTime = dateMatch ? `${dateMatch[1]} à ${dateMatch[2]}` : null;
-
       let smsBody;
       if (hasRDV && isVisite) {
         smsBody = `Bonjour, votre RDV de visite avec l'Agence des Jardins est bien enregistré${rdvDateTime ? ` : ${rdvDateTime}` : ''}. Notre conseiller sera présent. Pour toute question : 01 89 48 09 17`;
