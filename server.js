@@ -734,7 +734,7 @@ app.post('/retell/webhook', express.json(), async (req, res) => {
     if (/chaud|rendez-vous|rdv|urgent|imm[eé]diat|sign/i.test(summary + transcript)) score = 'CHAUD';
     else if (/ti[eè]de|r[eé]flexion|mois|semaine|peut-[eê]tre/i.test(summary + transcript)) score = 'TIÈDE';
 
-    const ntfyTopic = '33620845417';
+    const ntfyTopic = 'agence-leads';
     const scoreEmoji = score === 'CHAUD' ? '🔥' : score === 'TIÈDE' ? '🌡️' : '❄️';
 
     // ── 1. NTFY → patron ──────────────────────────────────────────────────
