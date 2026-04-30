@@ -712,6 +712,83 @@ app.post('/retell/web-call', async (req, res) => {
   }
 });
 
+// ─── Retell Webhook — Agence des Jardins (call_ended) ──────────────────────
+app.post('/retell/webhook', express.json(), async (req, res) => {
+  res.sendStatus(200); // répondre immédiatement à Retell
+  try {
+    const event = req.body.event;
+    const call  = req.body.call || req.body.data || {};
+    if (event !== 'call_ended') return;
+
+    const fromNumber  = call.from_number  || call.from || '';
+    const transcript  = call.transcript   || '';
+    const analysis    = call.call_analysis || {};
+    const summary     = analysis.call_summary || 'Résumé non disponible';
+    const sentiment   = analysis.user_sentiment || 'inconnu';
+    const duration    = call.end_timestamp && call.start_timestamp
+      ? Math.round((call.end_timestamp - call.start_timestamp) / 1000) + 's'
+      : '';
+
+    // Score détecté dans le résumé
+    let score = 'FROID';
+    if (/chaud|rendez-vous|rdv|urgent|imm[eé]diat|sign/i.test(summary + transcript)) score = 'CHAUD';
+    else if (/ti[eè]de|r[eé]flexion|mois|semaine|peut-[eê]tre/i.test(summary + transcript)) score = 'TIÈDE';
+
+    const ntfyTopic = '33620845417';
+    const scoreEmoji = score === 'CHAUD' ? '🔥' : score === 'TIÈDE' ? '🌡️' : '❄️';
+
+    // ── 1. NTFY → patron ──────────────────────────────────────────────────
+    const ntfyMsg = [
+      `${scoreEmoji} Appel Agence des Jardins`,
+      `📞 Appelant : ${fromNumber || 'inconnu'}`,
+      `⏱ Durée : ${duration}`,
+      `😊 Sentiment : ${sentiment}`,
+      `🎯 Score : ${score}`,
+      ``,
+      `📋 Résumé :`,
+      summary,
+    ].join('\n');
+
+    await fetch(`https://ntfy.sh/${ntfyTopic}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Title': `${scoreEmoji} Lead immobilier — ${score}`,
+        'Priority': score === 'CHAUD' ? 'high' : 'default',
+        'Tags': 'house,phone',
+      },
+      body: ntfyMsg,
+    }).then(r => console.log('[ntfy] Status:', r.status))
+      .catch(e => console.error('[ntfy] Erreur:', e.message));
+
+    // ── 2. SMS Brevo → client appelant ────────────────────────────────────
+    if (fromNumber && fromNumber !== 'unknown') {
+      const smsBody = `Bonjour, merci pour votre appel à l'Agence des Jardins. Un conseiller vous recontacte très prochainement. 📞 01 89 48 09 17 | agence@desjardins.immo`;
+
+      await fetch('https://api.brevo.com/v3/transactionalSMS/sms', {
+        method: 'POST',
+        headers: {
+          'api-key': process.env.BREVO_API_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sender: 'ADesJardins',
+          recipient: fromNumber.startsWith('+') ? fromNumber : `+${fromNumber}`,
+          content: smsBody,
+          type: 'transactional',
+        }),
+      }).then(async r => {
+        const txt = await r.text();
+        console.log('[SMS Brevo] Status:', r.status, txt.slice(0, 100));
+      }).catch(e => console.error('[SMS Brevo] Erreur:', e.message));
+    }
+
+    console.log(`[Retell Webhook] Appel traité : ${fromNumber} | Score: ${score} | Durée: ${duration}`);
+  } catch (err) {
+    console.error('[Retell Webhook] Exception:', err.message);
+  }
+});
+
 // ─── Démarrage ─────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`\n🚀 ReceptIA serveur démarré sur http://localhost:${PORT}`);
