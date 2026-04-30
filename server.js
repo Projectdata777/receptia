@@ -509,7 +509,7 @@ app.post('/onboarding', rateLimit(60_000, 5), async (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
-app.get('/health', (req, res) => res.json({ ok: true, ts: Date.now(), v: '2' }));
+app.get('/health', (req, res) => res.json({ ok: true, ts: Date.now(), v: '3-sms-fix' }));
 
 // ─── Agence des Jardins — site statique ────────────────────────────────────
 app.get('/agence-des-jardins', (req, res) => {
