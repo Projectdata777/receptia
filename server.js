@@ -509,6 +509,8 @@ app.post('/onboarding', rateLimit(60_000, 5), async (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
+app.get('/health', (req, res) => res.json({ ok: true, ts: Date.now() }));
+
 // GET / (fallback — sert index.html)
 // ═══════════════════════════════════════════════════════════════════════════
 app.get('/', (req, res) => {
@@ -712,13 +714,24 @@ app.post('/retell/web-call', async (req, res) => {
   }
 });
 
-// ─── Retell Webhook — Agence des Jardins (call_ended) ──────────────────────
+// ─── Retell Webhook — Agence des Jardins ────────────────────────────────────
 app.post('/retell/webhook', express.json(), async (req, res) => {
   res.sendStatus(200); // répondre immédiatement à Retell
   try {
     const event = req.body.event;
     const call  = req.body.call || req.body.data || {};
-    if (event !== 'call_ended') return;
+    console.log(`[Retell Webhook] event="${event}" call_id="${call.call_id}" from="${call.from_number}"`);
+
+    // call_analyzed = analyse complète disponible (summary, sentiment)
+    // call_ended = fallback si call_analyzed n'est pas configuré
+    if (event !== 'call_analyzed' && event !== 'call_ended') return;
+
+    // Si call_ended arrive sans résumé → attendre call_analyzed
+    const analysis = call.call_analysis || {};
+    if (event === 'call_ended' && !analysis.call_summary) {
+      console.log('[Retell Webhook] call_ended sans résumé, on attend call_analyzed');
+      return;
+    }
 
     const fromNumber  = call.from_number  || call.from || '';
     const transcript  = call.transcript   || '';
@@ -837,6 +850,17 @@ app.post('/retell/webhook', express.json(), async (req, res) => {
     console.error('[Retell Webhook] Exception:', err.message);
   }
 });
+
+// ─── Keepalive Render (évite le cold start pendant les heures ouvrables) ────
+// Ping toutes les 10 min entre 7h et 22h
+setInterval(() => {
+  const hour = new Date().getHours();
+  if (hour >= 7 && hour < 22) {
+    fetch(`https://receptia.onrender.com/health`)
+      .then(r => console.log('[Keepalive] ping status:', r.status))
+      .catch(() => {}); // silencieux si échec
+  }
+}, 10 * 60 * 1000);
 
 // ─── Démarrage ─────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
