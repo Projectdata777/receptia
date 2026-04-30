@@ -674,6 +674,44 @@ function updateClientStatus(email, statut) {
   }
 }
 
+// ─── Retell Web Call — Agence des Jardins ──────────────────────────────────
+app.options('/retell/web-call', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.sendStatus(204);
+});
+
+app.post('/retell/web-call', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  try {
+    const apiKey   = process.env.RETELL_API_KEY;
+    const agentId  = process.env.RETELL_AGENT_ID;
+    if (!apiKey || !agentId) return res.status(500).json({ error: 'Retell config manquante' });
+
+    const retellRes = await fetch('https://api.retellai.com/v2/create-web-call', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ agent_id: agentId }),
+    });
+
+    if (!retellRes.ok) {
+      const err = await retellRes.text();
+      console.error('[Retell] web-call error:', err);
+      return res.status(502).json({ error: 'Retell API error', detail: err });
+    }
+
+    const data = await retellRes.json();
+    res.json({ access_token: data.access_token, call_id: data.call_id });
+  } catch (err) {
+    console.error('[Retell] web-call exception:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ─── Démarrage ─────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`\n🚀 ReceptIA serveur démarré sur http://localhost:${PORT}`);
