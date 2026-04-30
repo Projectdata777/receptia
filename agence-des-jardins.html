@@ -719,13 +719,11 @@ section[id] { scroll-margin-top: 80px; }
   transform: translateY(-6px);
   box-shadow: var(--shadow-card), var(--shadow-or);
 }
-.listing-card.featured { grid-column: span 2; }
 .listing-img {
   position: relative;
   overflow: hidden;
-  height: 280px;
+  height: 220px;
 }
-.listing-card.featured .listing-img { height: 380px; }
 .listing-img img {
   width: 100%; height: 100%;
   object-fit: cover;
@@ -1765,7 +1763,6 @@ footer {
    ============================================================ */
 @media (max-width: 1100px) {
   .listings-grid { grid-template-columns: repeat(2, 1fr); }
-  .listing-card.featured { grid-column: span 2; }
   .services-grid { grid-template-columns: repeat(2, 1fr); }
   .chiffres-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
@@ -1778,7 +1775,6 @@ footer {
   .hamburger { display: flex; }
   .section-inner { padding: 0 24px; }
   .listings-grid { grid-template-columns: 1fr; }
-  .listing-card.featured { grid-column: span 1; }
   .services-grid { grid-template-columns: 1fr; }
   .chiffres-grid { grid-template-columns: repeat(2, 1fr); }
   .agent-wrapper { grid-template-columns: 1fr; gap: 60px; }
@@ -2076,8 +2072,8 @@ footer {
     </div>
     <div class="listings-grid" id="listingsGrid">
 
-      <!-- Bien 1 - Featured -->
-      <div class="listing-card featured reveal" data-type="vente">
+      <!-- Bien 1 -->
+      <div class="listing-card reveal" data-type="vente">
         <div class="listing-img">
           <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/171451/171451768_1.jpg?1777502126" alt="Maison Gommecourt" loading="lazy">
           <div class="listing-img-overlay"></div>
@@ -2578,7 +2574,7 @@ footer {
       </div>
 
       <!-- Local commercial -->
-      <div class="listing-card reveal reveal-delay-1" data-type="location">
+      <div class="listing-card reveal reveal-delay-1" data-type="location" style="order:12">
         <div class="listing-img">
           <img src="https://medias.consortium-immobilier.fr/photos_immo_formats/451_339/172226/172226574_1.jpg?1772416657" alt="Local commercial Vernon" loading="lazy">
           <div class="listing-img-overlay"></div>
@@ -2598,6 +2594,9 @@ footer {
           </div>
         </div>
       </div>
+
+      <!-- Placeholder invisible pour équilibrer la grille (12e item) -->
+      <div aria-hidden="true" style="visibility:hidden;pointer-events:none;border:none;background:transparent;box-shadow:none;"></div>
 
     </div>
     <div style="text-align:center;margin-top:36px;" class="reveal">
@@ -3188,14 +3187,7 @@ function filterListings(btn, type) {
   document.querySelectorAll('.listing-card').forEach(card => {
     const show = type === 'all' || card.dataset.type === type;
     card.style.display = show ? '' : 'none';
-    if (type === 'all' || card.dataset.type !== 'vente') {
-      card.classList.remove('featured');
-    }
   });
-  if (type === 'all') {
-    const first = document.querySelector('.listing-card');
-    if (first) first.classList.add('featured');
-  }
 }
 
 // ============================================================
