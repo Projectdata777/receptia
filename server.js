@@ -763,7 +763,36 @@ app.post('/retell/webhook', express.json(), async (req, res) => {
 
     // ── 2. SMS Brevo → client appelant ────────────────────────────────────
     if (fromNumber && fromNumber !== 'unknown') {
-      const smsBody = `Bonjour, merci pour votre appel à l'Agence des Jardins. Un conseiller vous recontacte très prochainement. 📞 01 89 48 09 17 | agence@desjardins.immo`;
+      const txt = (summary + ' ' + transcript).toLowerCase();
+
+      // Détecter le type de besoin
+      const isVisite      = /visite|visiter|voir le bien|voir l.appart|voir la maison/i.test(txt);
+      const isEstimation  = /estimat|valeur|prix de (mon|ma|notre)|combien vaut|évaluat/i.test(txt);
+      const isVente       = /vendre|mise en vente|mandat de vente|vente de (mon|ma|notre)/i.test(txt);
+      const isLocation    = /louer|location|trouver un logement|cherche un appart|cherche une maison/i.test(txt);
+      const hasRDV        = /rendez-vous|rdv|convenu|confirm|planifi|fix[eé] le|prévu le/i.test(txt);
+
+      // Extraire date/heure si mentionnée
+      const dateMatch = (summary + ' ' + transcript).match(/\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)\b.*?\b(\d{1,2}h\d{0,2}|\d{1,2}:\d{2})/i);
+      const rdvDateTime = dateMatch ? `${dateMatch[1]} à ${dateMatch[2]}` : null;
+
+      let smsBody;
+      if (hasRDV && isVisite) {
+        smsBody = `Bonjour, votre RDV de visite avec l'Agence des Jardins est bien enregistré${rdvDateTime ? ` : ${rdvDateTime}` : ''}. Notre conseiller sera présent. Pour toute question : 01 89 48 09 17`;
+      } else if (hasRDV && isEstimation) {
+        smsBody = `Bonjour, votre RDV d'estimation gratuite avec l'Agence des Jardins est confirmé${rdvDateTime ? ` : ${rdvDateTime}` : ''}. Nos experts se déplacent chez vous. Contact : 01 89 48 09 17`;
+      } else if (hasRDV && (isVente || isLocation)) {
+        const typeLabel = isVente ? 'de mise en vente' : 'pour votre projet de location';
+        smsBody = `Bonjour, votre RDV ${typeLabel} avec l'Agence des Jardins est confirmé${rdvDateTime ? ` : ${rdvDateTime}` : ''}. À très bientôt ! 01 89 48 09 17`;
+      } else if (isEstimation) {
+        smsBody = `Bonjour, merci pour votre demande d'estimation. Un expert de l'Agence des Jardins vous contacte très prochainement pour fixer un RDV. 📞 01 89 48 09 17`;
+      } else if (isVisite) {
+        smsBody = `Bonjour, merci pour votre intérêt. Un conseiller de l'Agence des Jardins vous rappelle pour organiser votre visite. 📞 01 89 48 09 17`;
+      } else if (isVente) {
+        smsBody = `Bonjour, merci pour votre contact. Un expert de l'Agence des Jardins vous rappelle rapidement pour étudier votre projet de vente. 📞 01 89 48 09 17`;
+      } else {
+        smsBody = `Bonjour, merci pour votre appel à l'Agence des Jardins. Un conseiller vous recontacte très prochainement. 📞 01 89 48 09 17`;
+      }
 
       await fetch('https://api.brevo.com/v3/transactionalSMS/sms', {
         method: 'POST',
